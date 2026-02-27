@@ -8,7 +8,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = 3000;
-const HTML_FILE = path.join(__dirname, 'nba-winprob-kalshi.html');
+const HTML_FILE = path.join(__dirname, 'index.html');
 
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
