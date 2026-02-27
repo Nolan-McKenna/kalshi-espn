@@ -566,7 +566,7 @@ function setSport(sport) {
 const themeBtn = document.getElementById('theme-toggle');
 
 // 1. Check for saved preference on load
-const savedTheme = localStorage.getItem('theme') || 'dark';
+const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 updateToggleButton(savedTheme);
 
