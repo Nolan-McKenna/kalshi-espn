@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalshi/ESPN NBA Bets</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #222;
+    --accent: #c8f135;
+    --text: #f0f0f0;
+    --muted: #555;
+    --home: #c8f135;
+    --away: #ff4d6d;
+    --kalshi: #4da6ff;
+    --chart-bg: #0d0d0d;
+  }
+  [data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f4f4f4;
+  --border: #dddddd;
+  --text: #1a1a1a;
+  --muted: #777777;
+  --accent: #7ca100;
+  --chart-bg: #f4f4f4; /* Match surface for light mode */
+}
+
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+
+  header span {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  #status-bar {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  #status-bar .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 6px;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  #games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .game-card {
+    text-decoration: none !important;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(200,241,53,0.04));
+    pointer-events: none;
+  }
+
+  .game-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+  .game-card.active { 
+    border-color: var(--card-home, #c8f135); 
+    background: var(--surface); 
+  }
+  .game-card.value-bet {
+    border-color: var(--card-home, #c8f135);
+    box-shadow: 0 0 14px rgba(200,241,53,0.2);
+  }
+
+  .card-stripe {
+    height: 6px;
+    background: var(--card-home); /* Now Home is the base (left side) */
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: none !important;
+  }
+
+  /* The Away Team Fill (coming from the right) */
+  .card-stripe::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0; /* Grow from the right */
+    height: 100%;
+    /* We calculate Away % as (100 - Home WP) */
+    width: calc(100% - var(--home-wp, 50%)); 
+    background: var(--card-away);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .game-card .teams {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+
+  .game-card .score {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .game-card .game-status {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .live-tag {
+    display: inline-block;
+    background: var(--away);
+    color: #fff;
+    font-size: 0.55rem;
+    padding: 2px 6px;
+    letter-spacing: 0.15em;
+    margin-right: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Detail panel */
+  #detail { display: none; border: 1px solid var(--border); background: var(--surface); padding: 2rem; }
+  #detail.visible { display: block; }
+
+  #detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  #detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; }
+  #detail-score { font-size: 1.5rem; font-weight: 600; color: var(--accent); }
+  #detail-time { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+  /* Win prob bar */
+  .section-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .wp-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .wp-label-row .home-label { color: var(--home); }
+  .wp-label-row .away-label { color: var(--away); }
+
+  .wp-bar-track {
+  height: 28px;
+  background: var(--away); 
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+  .wp-bar-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--home);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .wp-bar-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--bg);
+    transform: translateX(-50%);
+    transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .wp-numbers {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
+  .wp-pct { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; line-height: 1; }
+  .wp-pct.home { color: var(--home); }
+  .wp-pct.away { color: var(--away); }
+
+  /* Kalshi section */
+  #kalshi-section {
+    margin-top: 0;
+  }
+
+  .kalshi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .kalshi-card {
+    background: var(--chart-bg); /* Changed from #0d0d0d */
+    border: 1px solid var(--border);
+    padding: 1rem;
+    position: relative;
+  }
+
+  .kalshi-card .k-team {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+
+  .kalshi-card .k-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .kalshi-card .k-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--kalshi);
+    line-height: 1;
+  }
+
+  .kalshi-card .k-implied {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  .kalshi-card .k-ml {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 0.3rem;
+  }
+
+  /* Edge indicator */
+  #edge-section {
+    background: var(--chart-bg);
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    display: none;
+  }
+
+  #edge-section.visible { display: block; }
+
+  .edge-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .edge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+  }
+
+  .edge-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+  }
+
+  .edge-value.positive { color: var(--accent); }
+  .edge-value.negative { color: var(--away); }
+  .edge-value.neutral { color: var(--muted); }
+
+  .edge-bet-on {
+    font-size: 0.7rem;
+    color: var(--text);
+    text-align: right;
+  }
+
+  /* Chart */
+  #chart-container { margin-top: 1.5rem; }
+  #chart-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 0.75rem; }
+  canvas#wp-chart { width: 100%; height: 160px; display: block; }
+
+  #poll-status { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1rem; text-align: right; }
+
+  #kalshi-status {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    min-height: 1em;
+  }
+
+  #error-msg { color: var(--away); font-size: 0.75rem; padding: 1rem; border: 1px solid var(--away); display: none; margin-bottom: 1rem; }
+
+  .empty-state { font-size: 0.75rem; color: var(--muted); padding: 2rem 0; }
+
+  .kalshi-link {
+    font-size: 0.6rem;
+    color: var(--kalshi);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-top: 0.4rem;
+    opacity: 0.7;
+  }
+  .kalshi-link:hover { opacity: 1; }
+
+  .game-card.value-bet {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(200, 241, 53, 0.25);
+  }
+
+  .sport-btn {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono';
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .sport-btn:hover { color: var(--text); border-color: var(--muted); }
+  .sport-btn.active-sport { color: var(--accent); border-color: var(--accent); }
+
+  .pregame-label {
+    color: var(--kalshi); /* Use blue to indicate a projection */
+    font-weight: 600;
+    font-size: 0.65rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-top: 0.4rem;
+    opacity: 0.7;
+  }
+
+  .pregame-label:hover { opacity: 1; }
+
+  /* Logo Styling */
+  .team-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    margin-bottom: 5px;
+  }
+
+  .brand-logo {
+    height: 24px;
+    vertical-align: middle;
+  }
+
+  /* Hover effect for your new links */
+  .section-label a:hover, .wp-pct a:hover {
+    color: var(--accent) !important;
+    text-decoration: underline !important;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BETS</h1>
+  <div style="display:flex; align-items:center; gap:0.5rem;">
+    <button id="sport-nba" class="sport-btn active-sport" onclick="setSport('nba')">NBA</button>
+    <button id="sport-cbb" class="sport-btn" onclick="setSport('cbb')">CBB Top 25</button>
+  </div>
+  <span id="sport-label">NBA · ESPN + Kalshi</span>
+  <button id="theme-toggle" style="margin-left: auto; background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; font-family: 'IBM Plex Mono'; font-size: 0.6rem;">
+    TOGGLE LIGHT MODE
+  </button>
+</header>
+
+<div id="status-bar"><span class="dot"></span> Fetching live games...</div>
+<div id="error-msg"></div>
+<div id="games-grid"></div>
+
+<div id="detail">
+  <div id="detail-header">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <img id="home-logo" src="" class="team-icon">
+        <span style="font-size: 0.6rem; color: var(--muted);">HOME</span>
+      </div>
+      <div style="font-family: 'Bebas Neue'; font-size: 2rem; color: var(--muted);">VS</div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <img id="away-logo" src="" class="team-icon">
+        <span style="font-size: 0.6rem; color: var(--muted);">AWAY</span>
+      </div>
+      <div style="margin-left: 10px;">
+        <div id="detail-title">—</div>
+        <div id="detail-time">—</div>
+      </div>
+    </div>
+    <div id="detail-score">—</div>
+  </div>
+
+  <!-- ESPN Win Probability -->
+  <div class="section-label">ESPN Win Probability</div>
+  <div>
+    <div class="wp-label-row">
+      <span class="home-label" id="home-team-label">HOME</span>
+      <span class="away-label" id="away-team-label">AWAY</span>
+    </div>
+    <div class="wp-bar-track">
+      <div class="wp-bar-fill" id="wp-bar" style="width:50%"></div>
+      <div class="wp-bar-divider" id="wp-divider" style="left:50%"></div>
+    </div>
+    <div class="wp-numbers">
+      <div class="wp-pct home" id="home-pct">—</div>
+      <div class="wp-pct away" id="away-pct">—</div>
+    </div>
+  </div>
+
+  <!-- Kalshi Odds -->
+  <div class="section-label" id="kalshi-section-label">Kalshi Moneyline</div>
+  <div id="kalshi-section">
+    <div class="kalshi-grid">
+      <div class="kalshi-card">
+        <div class="k-label">Home · YES price</div>
+        <div class="k-team" id="k-home-team">—</div>
+        <div class="k-price" id="k-home-price">—</div>
+        <div class="k-implied" id="k-home-implied"></div>
+        <div class="k-ml" id="k-home-ml"></div>
+      </div>
+      <div class="kalshi-card">
+        <div class="k-label">Away · YES price</div>
+        <div class="k-team" id="k-away-team">—</div>
+        <div class="k-price" id="k-away-price">—</div>
+        <div class="k-implied" id="k-away-implied"></div>
+        <div class="k-ml" id="k-away-ml"></div>
+      </div>
+    </div>
+    <div id="kalshi-status">Searching Kalshi markets...</div>
+    <a id="kalshi-link" class="kalshi-link" href="#" target="_blank" style="display:none">→ View on Kalshi</a>
+
+    <!-- Edge calculator -->
+    <div id="edge-section">
+      <div class="edge-label">Edge vs ESPN Model</div>
+      <div class="edge-row">
+        <div>
+          <div style="font-size:0.65rem; color:var(--muted); margin-bottom:2px;">Biggest gap</div>
+          <div class="edge-value" id="edge-value">—</div>
+        </div>
+        <div class="edge-bet-on" id="edge-bet-on">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div id="chart-container">
+    <div id="chart-label">Win probability — game history</div>
+    <canvas id="wp-chart"></canvas>
+  </div>
+
+  <div id="poll-status">Polling every 15s</div>
+</div>
+
+<script>
+const ESPN_NBA    = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
+const ESPN_CBB    = 'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball';
+const KALSHI_BASE = 'http://localhost:3000/kalshi';
+
+let activeSport   = 'nba';   // 'nba' | 'cbb'
+let ESPN_BASE     = ESPN_NBA;
+
+let activeGameId = null;
+let activeTeams = { home: '', away: '' };
+let pollTimer = null;
+let chartHistory = [];
+
+function setSport(sport) {
+  if (activeSport === sport) return;
+  activeSport = sport;
+  ESPN_BASE = sport === 'nba' ? ESPN_NBA : ESPN_CBB;
+
+  // Toggle button styles
+  document.getElementById('sport-nba').classList.toggle('active-sport', sport === 'nba');
+  document.getElementById('sport-cbb').classList.toggle('active-sport', sport === 'cbb');
+  document.getElementById('sport-label').textContent =
+    sport === 'nba' ? 'NBA · ESPN + Kalshi' : 'CBB Top 25 · ESPN + Kalshi';
+
+  // Stop any active polling
+  if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+  if (window.kalshiTimer) { clearTimeout(window.kalshiTimer); window.kalshiTimer = null; }
+  activeGameId = null;
+  activeTeams = { home: '', away: '' };
+  lastKalshiData = null;
+  document.getElementById('detail').classList.remove('visible');
+
+  loadGames();
+}
+
+const themeBtn = document.getElementById('theme-toggle');
+
+// 1. Check for saved preference on load
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateToggleButton(savedTheme);
+
+// 2. Click Event
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateToggleButton(next);
+  
+  // Redraw chart if game is active
+  if (activeGameId) updateWinProb(); 
+});
+
+function updateToggleButton(theme) {
+  themeBtn.textContent = theme === 'light' ? 'SWITCH TO DARK' : 'SWITCH TO LIGHT';
+}
+
+// ESPN abbreviation → Kalshi abbreviation (only entries that differ)
+const ESPN_TO_KALSHI = {
+  'GS': 'GSW',
+  'NY': 'NYK',
+  'NO': 'NOP',
+  'SA': 'SAS',
+  'UTAH': 'UTA',
+  'WSH': 'WAS',
+
+  'CONN': 'UCONN',    // ESPN: UConn -> Kalshi: UCONN
+  'KU': 'KAN',        // ESPN: KU (Kansas) -> Kalshi: KAN
+  'UK': 'KTY',        // ESPN: UK (Kentucky) -> Kalshi: KTY
+  'ALA': 'BAMA',      // ESPN: ALA -> Kalshi: BAMA
+  'ARIZ': 'ZONA',     // ESPN: ARIZ -> Kalshi: ZONA
+  'MSU': 'MIST',      // ESPN: MSU (Mich St) -> Kalshi: MIST
+  'MISS': 'OLEM',     // ESPN: MISS (Ole Miss) -> Kalshi: OLEM
+  'WISC': 'WIS',      // ESPN: WISC -> Kalshi: WIS
+  'PUR': 'PURD',      // ESPN: PUR -> Kalshi: PURD
+  'VILL': 'VIL',      // ESPN: VILL -> Kalshi: VIL
+  'STJU': 'SJU',      // ESPN: STJN (St. Johns) -> Kalshi: SJU
+  'NCST': 'NCSU',     // ESPN: NCST -> Kalshi: NCSU
+  'FSU': 'FLST',      // ESPN: FSU -> Kalshi: FLST
+  'OSU': 'OHST',      // ESPN: OSU (Ohio St) -> Kalshi: OHST
+  'WAKE': 'WF',       // ESPN: WAKE -> Kalshi: WF
+  'OKLA': 'OU',       // ESPN: OKLA -> Kalshi: OU
+  'WVU': 'WVA',
+  'M-OH': 'MOH'
+};
+
+function toKalshiAbbr(espnAbbr) {
+  return (ESPN_TO_KALSHI[espnAbbr] || espnAbbr).toUpperCase();
+}
+
+// Build date string in Kalshi format using PST date: e.g. 26FEB25
+function kalshiDateStr(date) {
+  const pst = new Date(date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const yy = String(pst.getFullYear()).slice(2);
+  const mm = months[pst.getMonth()];
+  const dd = String(pst.getDate()).padStart(2, '0');
+  return `${yy}${mm}${dd}`;
+}
+
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() { document.getElementById('error-msg').style.display = 'none'; }
+
+// Convert cents (Kalshi) to American moneyline odds
+function centsToAmerican(cents) {
+  const p = cents / 100;
+  if (p >= 0.5) {
+    return Math.round(-p / (1 - p) * 100);
+  } else {
+    return Math.round((1 - p) / p * 100);
+  }
+}
+
+function formatAmerican(ml) {
+  return ml >= 0 ? `+${ml}` : `${ml}`;
+}
+
+function getPSTDateParam() {
+  // Get current date in PST/PDT — games reset at midnight PST
+  const pst = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  const y = pst.getFullYear();
+  const m = String(pst.getMonth() + 1).padStart(2, '0');
+  const d = String(pst.getDate()).padStart(2, '0');
+  return `${y}${m}${d}`;
+}
+
+// ── Team colors ───────────────────────────────────────────────────────────────
+// const TEAM_COLORS = {
+//   ATL:['#C8102E','#FDB927'], BOS:['#007A33','#BA9653'], BKN:['#AAAAAA','#444444'],
+//   CHA:['#00788C','#1D1160'], CHI:['#CE1141','#000000'], CLE:['#860038','#FDBB30'],
+//   DAL:['#00538C','#B8C4CA'], DEN:['#FEC524','#0E2240'], DET:['#C8102E','#1D42BA'],
+//   GSW:['#FFC72C','#1D428A'], HOU:['#CE1141','#C4CED4'], IND:['#FDBB30','#002D62'],
+//   LAC:['#C8102E','#1D428A'], LAL:['#FDB927','#552583'], MEM:['#5D76A9','#12173F'],
+//   MIA:['#98002E','#F9A01B'], MIL:['#00471B','#EEE1C6'], MIN:['#236192','#0C2340'],
+//   NOP:['#0C2340','#C8102E'], NO:['#0C2340','#C8102E'],
+//   NYK:['#F58426','#006BB6'], NY:['#F58426','#006BB6'],
+//   OKC:['#007AC1','#EF3B24'], ORL:['#0077C0','#C4CED4'],
+//   PHI:['#006BB6','#ED174C'], PHX:['#E56020','#1D1160'],
+//   POR:['#E03A3E','#000000'], SAC:['#5A2D81','#63727A'],
+//   SAS:['#C4CED4','#888888'], SA:['#C4CED4','#888888'],
+//   TOR:['#CE1141','#000000'],
+//   UTA:['#002B5C','#00471B'], UTAH:['#002B5C','#00471B'],
+//   WAS:['#E31837','#002B5C'], WSH:['#E31837','#002B5C'],
+// };
+
+const TEAM_COLORS = {
+  // Primary color is index 0, Secondary is index 1
+  ATL: ['#C1D32F', '#E03A3E'], // Volt (Distinct), Hawks Red
+  BOS: ['#007A33', '#BA9653'], // Celtics Green, Gold
+  BKN: ['#000000', '#FFFFFF'], // Black, White
+  CHA: ['#00788C', '#1D1160'], // Teal (Distinct), Purple
+  CHI: ['#CE1141', '#000000'], // Bulls Red, Black
+  CLE: ['#6F263D', '#FFB81C'], // Wine, Gold
+  DAL: ['#0053BC', '#BBC4CA'], // Royal Blue, Silver
+  DEN: ['#0E2240', '#FEC524'], // Midnight Navy, Gold
+  DET: ['#1D428A', '#C8102E'], // Royal Blue, Red
+  GSW: ['#FFC72C', '#1D428A'], // Golden State Yellow, Blue
+  HOU: ['#C4CED4', '#CE1141'], // Silver (To distinguish from CHI), Red
+  IND: ['#FDBB30', '#002D62'], // Pacers Gold, Navy
+  LAC: ['#1D428A', '#C8102E'], // New Naval Blue (Distinct), Red
+  LAL: ['#552583', '#FDB927'], // Lakers Purple, Gold
+  MEM: ['#5D76A9', '#12173F'], // Light Blue, Navy
+  MIA: ['#98002E', '#F9A01B'], // Heat Red, Yellow
+  MIL: ['#00471B', '#EEE1C6'], // Bucks Green, Cream
+  MIN: ['#236192', '#0C2340'], // Lake Blue, Navy
+  NOP: ['#002B5C', '#B4975A'], // Navy, Gold
+  NO:  ['#002B5C', '#B4975A'],
+  NYK: ['#006BB6', '#F58426'], // Knicks Blue, Orange
+  NY:  ['#006BB6', '#F58426'],
+  OKC: ['#007AC1', '#EF3B24'], // Thunder Blue, Sunset Orange
+  ORL: ['#0077C0', '#C4CED4'], // Magic Blue, Silver
+  PHI: ['#ED174C', '#006BB6'], // Sixers Red, Blue
+  PHX: ['#E56020', '#1D1160'], // Suns Orange, Purple
+  POR: ['#E03A3E', '#000000'], // Blazers Red, Black
+  SAC: ['#5A2D81', '#63727A'], // Kings Purple, Silver
+  SAS: ['#C4CED4', '#000000'], // Spurs Silver, Black
+  SA:  ['#C4CED4', '#000000'],
+  TOR: ['#000000', '#CE1141'], // Black, Raptors Red
+  UTA: ['#270049', '#00A9E0'], // Jazz Purple (New), Sky Blue
+  UTAH:['#270049', '#00A9E0'],
+  WAS: ['#E31837', '#002B5C'], // Wizards Red, Navy
+  WSH: ['#E31837', '#002B5C'],
+};
+
+function getTeamColor(abbr) {
+  const c = TEAM_COLORS[abbr];
+  if (!c) return '#c8f135';
+  // Lighten if too dark to read on black background
+  let [r, g, b] = [parseInt(c[0].slice(1,3),16), parseInt(c[0].slice(3,5),16), parseInt(c[0].slice(5,7),16)];
+  if (0.299*r + 0.587*g + 0.114*b < 55) {
+    r = Math.round(r + (255-r)*0.6);
+    g = Math.round(g + (255-g)*0.6);
+    b = Math.round(b + (255-b)*0.6);
+    return `rgb(${r},${g},${b})`;
+  }
+  return c[0];
+}
+
+// Generate a consistent color for CBB teams from their abbreviation (no hardcoded map needed)
+const CBB_PALETTE = [
+  '#E03A3E','#007A33','#0053BC','#CE1141','#FDB927','#00788C',
+  '#5A2D81','#C8102E','#236192','#FEC524','#E56020','#006BB6',
+  '#5D76A9','#98002E','#00471B','#FDBB30','#007AC1','#0077C0',
+];
+function getCBBColor(abbr) {
+  // Hash abbreviation to a palette index for stable colors
+  let h = 0;
+  for (let i = 0; i < abbr.length; i++) h = (h * 31 + abbr.charCodeAt(i)) & 0xffffffff;
+  return CBB_PALETTE[Math.abs(h) % CBB_PALETTE.length];
+}
+
+async function loadGames() {
+  try {
+    let events = [];
+
+    if (activeSport === 'nba') {
+      const data = await fetchJSON(`${ESPN_BASE}/scoreboard?dates=${getPSTDateParam()}`);
+      events = data.events || [];
+    } else {
+      // CBB: fetch top 25 ranked games only
+      // groups=50 = Men's CBB; filter to games where at least one team is ranked
+      const data = await fetchJSON(`${ESPN_BASE}/scoreboard?dates=${getPSTDateParam()}&groups=50&limit=200`);
+      const all = data.events || [];
+      events = all.filter(event => {
+        const comp = event.competitions[0];
+        return comp.competitors.some(c => c.curatedRank?.current <= 25);
+      });
+    }
+
+    const grid = document.getElementById('games-grid');
+    grid.innerHTML = '';
+
+    if (events.length === 0) {
+      const label = activeSport === 'nba' ? 'NBA' : 'Top 25 CBB';
+      grid.innerHTML = `<div class="empty-state">No ${label} games today.</div>`;
+      document.getElementById('status-bar').innerHTML = '<span class="dot"></span> No games today';
+      return;
+    }
+
+    const label = activeSport === 'nba' ? 'NBA' : 'Top 25 CBB';
+    document.getElementById('status-bar').innerHTML = `<span class="dot"></span> ${events.length} ${label} game(s) today`;
+
+    events.forEach(event => {
+      const comp = event.competitions[0];
+      const home = comp.competitors.find(c => c.homeAway === 'home');
+      const away = comp.competitors.find(c => c.homeAway === 'away');
+      const status = event.status.type;
+      const isLive = status.state === 'in';
+
+      // 1. Define Team info first
+      const homeAbbr = home.team.abbreviation;
+      const awayAbbr = away.team.abbreviation;
+      const homeColor = home.team.color ? `#${home.team.color}` : '#c8f135';
+      const awayColor = away.team.color ? `#${away.team.color}` : '#ff4d6d';
+
+      // CBB rank badges
+      const homeRank = home.curatedRank?.current;
+      const awayRank = away.curatedRank?.current;
+      const homeRankBadge = homeRank && homeRank <= 25 ? `<span style="font-size:0.55rem;color:var(--accent);margin-right:3px">#${homeRank}</span>` : '';
+      const awayRankBadge = awayRank && awayRank <= 25 ? `<span style="font-size:0.55rem;color:var(--accent);margin-right:3px">#${awayRank}</span>` : '';
+
+      // 2. Detect Win Probability for the mini-meter
+      let initialWP = 50; 
+      const liveProb = comp.situation?.lastPlay?.probability?.homeWinPercentage;
+      const pregameProb = event.predictor?.homeTeam?.gameProjection;
+
+      if (liveProb !== undefined) initialWP = liveProb * 100;
+      else if (pregameProb !== undefined) initialWP = pregameProb;
+
+      // 3. Create card and set properties
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.dataset.id = event.id;
+
+      // Now it's safe to set these because they are initialized above
+      card.style.setProperty('--card-home', homeColor);
+      card.style.setProperty('--card-away', awayColor);
+      card.style.setProperty('--home-wp', `${initialWP}%`);
+
+      card.innerHTML = `
+        <div class="card-stripe"></div>
+        <div class="teams">
+          ${homeRankBadge}<span style="color:${homeColor}">${homeAbbr}</span>
+          <span style="color:var(--muted)"> vs </span>
+          ${awayRankBadge}<span style="color:${awayColor}">${awayAbbr}</span>
+        </div>
+        <div class="score">${home.score ?? '—'} — ${away.score ?? '—'}</div>
+        <div class="game-status">
+          ${isLive ? '<span class="live-tag">Live</span>' : ''}
+          ${status.shortDetail || status.description}
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        selectGame(event.id, { home: homeAbbr, away: awayAbbr, homeName: home.team.name, awayName: away.team.name, homeColor: homeColor, awayColor: awayColor });
+      });
+      grid.appendChild(card);
+    });
+
+    updateSidebarMeters();
+
+    hideError();
+  } catch (e) {
+    showError(`Could not load games: ${e.message}`);
+  }
+}
+
+async function selectGame(gameId, teams) {
+  activeGameId = gameId;
+  activeTeams = teams;
+  chartHistory = [];
+  console.log(teams)
+
+  // 1. UI Resets
+  document.querySelectorAll('.game-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.game-card[data-id="${gameId}"]`)?.classList.add('active');
+  document.documentElement.style.setProperty('--home', teams.homeColor);
+  document.documentElement.style.setProperty('--away', teams.awayColor);
+
+  document.getElementById('home-team-label').textContent = `${teams.home} (Home)`;
+  document.getElementById('away-team-label').textContent = `${teams.away} (Away)`;
+  document.getElementById('k-home-team').textContent = teams.home;
+  document.getElementById('k-away-team').textContent = teams.away;
+  document.getElementById('detail').classList.add('visible');
+
+  // 2. Clear all existing timers to prevent "double-polling"
+  if (pollTimer) clearTimeout(pollTimer);
+  if (window.kalshiTimer) clearTimeout(window.kalshiTimer);
+
+  // 3. Independent Kalshi Loop (Always 2 seconds)
+  const runKalshiLoop = async () => {
+    if (activeGameId !== gameId) return; // Kill loop if game changed
+    await fetchKalshiOdds();
+    window.kalshiTimer = setTimeout(runKalshiLoop, 2000);
+  };
+
+  // 4. Independent ESPN Loop (Variable: 15s or 30m)
+  const runESPNLoop = async () => {
+    if (activeGameId !== gameId) return; // Kill loop if game changed
+
+    await updateWinProb(activeGameId);
+    
+    // First, fetch the summary to check status
+    const data = await fetchJSON(`${ESPN_BASE}/summary?event=${activeGameId}`);
+    const status = data.header?.competitions[0]?.status?.type?.name;
+    const isLive = ["STATUS_IN_PROGRESS", "STATUS_HALFTIME", "STATUS_END_PERIOD"].includes(status);
+    
+    // Run the UI update using the data we just fetched
+    await updateWinProb(); 
+
+    // Set next interval: 15 seconds if live, 30 minutes (1.8m ms) if pregame
+    const nextInterval = isLive ? 15000 : 1800000;
+    pollTimer = setTimeout(runESPNLoop, nextInterval);
+  };
+
+  // Initial immediate execution of both
+  runKalshiLoop();
+  runESPNLoop();
+}
+
+async function updateAll() {
+  await Promise.all([updateWinProb(), fetchKalshiOdds()]);
+}
+
+
+async function updateWinProb() {
+  if (!activeGameId) return;
+  try {
+    const data = await fetchJSON(`${ESPN_BASE}/summary?event=${activeGameId}`);
+    ESPNGameLink = data.header.links[0].href
+
+    const logoSport = activeSport === 'nba' ? 'nba' : 'ncaa';
+    let awayLogo;
+    let homeLogo;
+    if (logoSport == 'nba') {
+      awayLogo = `https://a.espncdn.com/i/teamlogos/${logoSport}/500/${activeTeams.away.toLowerCase()}.png`;
+      homeLogo = `https://a.espncdn.com/i/teamlogos/${logoSport}/500/${activeTeams.home.toLowerCase()}.png`;
+    } else {
+      let teamID0 = data.boxscore.teams[0].team.id;
+      let teamID1 = data.boxscore.teams[1].team.id;
+
+      awayLogo = `https://a.espncdn.com/i/teamlogos/${logoSport}/500/${teamID0}.png`;
+      homeLogo = `https://a.espncdn.com/i/teamlogos/${logoSport}/500/${teamID1}.png`;
+    }
+
+    document.getElementById('away-logo').src = awayLogo;
+    document.getElementById('home-logo').src = homeLogo;
+    
+    // Update basic header info
+    const comp = data.header?.competitions?.[0];
+    if (comp) {
+      const home = comp.competitors.find(c => c.homeAway === 'home');
+      const away = comp.competitors.find(c => c.homeAway === 'away');
+      document.getElementById('detail-title').textContent = `${home?.team?.abbreviation} vs ${away?.team?.abbreviation}`;
+      document.getElementById('detail-score').textContent = `${home?.score ?? '—'} — ${away?.score ?? '—'}`;
+      document.getElementById('detail-time').textContent = comp.status?.type?.shortDetail || '';
+    }
+
+    const wpData = data.winprobability || [];
+    const predictorData = data.predictor; // Fetch pregame data
+    const status = data.header?.competitions[0]?.status?.type?.name;
+    const startedStates = ["STATUS_IN_PROGRESS", "STATUS_HALFTIME", "STATUS_END_PERIOD", "STATUS_FINAL"];
+    const started = startedStates.includes(status);
+
+    let homeWP = 0.5;
+    const labelRow = document.querySelector('.section-label');
+
+    if (wpData.length > 0) {
+      // Game is live or has started
+      labelRow.textContent = "ESPN Live Win Probability";
+      const latest = wpData[wpData.length - 1];
+      homeWP = latest.homeWinPercentage ?? 0.5;
+      chartHistory = wpData.map(p => p.homeWinPercentage ?? 0.5);
+    } else if (predictorData && predictorData.homeTeam) {
+      // Game has not started, use pregame predictor
+      labelRow.innerHTML = `<a href="${ESPNGameLink}" class="pregame-label" target="_blank"><span>ESPN Pregame Prediction</span></a>`;
+      homeWP = predictorData.homeTeam.gameProjection / 100; // ESPN uses 0-100 scale
+      chartHistory = []; // No history yet
+    } else {
+      document.getElementById('poll-status').textContent = 'No prediction data available';
+      return;
+    }
+
+    // Update UI elements
+    document.getElementById('wp-bar').style.width = `${homeWP * 100}%`;
+    
+    const activeCard = document.querySelector(`.game-card[data-id="${activeGameId}"]`);
+    if (activeCard) {
+      activeCard.style.setProperty('--home-wp', `${homeWP * 100}%`);
+    }
+    document.getElementById('wp-divider').style.left = `${homeWP * 100}%`;
+    document.getElementById('home-pct').textContent = `${Math.round(homeWP * 100)}%`;
+    document.getElementById('away-pct').textContent = `${Math.round((1 - homeWP) * 100)}%`;
+
+    drawChart(chartHistory, started);
+    recalcEdge(homeWP);
+
+    document.getElementById('poll-status').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+  } catch (e) {
+    console.error("Update failed:", e);
+  }
+
+  const activeCard = document.querySelector(`.game-card[data-id="${activeGameId}"]`);
+  if (activeCard) {
+    activeCard.style.setProperty('--home-wp', `${homeWP * 100}%`);
+  }
+}
+
+
+let lastKalshiData = null;
+
+
+async function fetchKalshiOdds() {
+  const statusEl = document.getElementById('kalshi-status');
+  try {
+    const awayK = toKalshiAbbr(activeTeams.away);
+    const homeK = toKalshiAbbr(activeTeams.home);
+    const dateStr = kalshiDateStr(new Date());
+
+    // Series ticker: NBA uses KXNBAGAME, CBB uses KXNCAAMBGAME
+    const series   = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
+    const game_level = activeSport === 'nba' ? 'professional-basketball-game' : 'mens-college-basketball-mens-game';
+    const eventTicker = `${series}-${dateStr}${awayK}${homeK}`;
+    statusEl.textContent = `Syncing Kalshi: ${awayK} @ ${homeK}...`;
+
+    let eventData;
+    try {
+      eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
+    } catch(e) {
+      const searchData = await fetchJSON(`${KALSHI_BASE}/markets?limit=100&series_ticker=${series}&status=open`);
+      const match = (searchData.markets || []).find(m => {
+        const t = m.ticker.toUpperCase();
+        return t.includes(awayK) && t.includes(homeK);
+      });
+      if (!match) {
+        console.log(`debug: ${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`)
+        statusEl.textContent = `No active market found for ${activeTeams.away} @ ${activeTeams.home}`;
+        return;
+      }
+      eventData = await fetchJSON(`${KALSHI_BASE}/events/${match.event_ticker}?with_nested_markets=true`);
+    }
+
+    const markets = eventData.event?.markets || [];
+    if (markets.length === 0) return;
+
+    let awayMid = null;
+    let homeMid = null;
+
+    // away index 1, home index 0
+    awayMid = Math.round(((markets[1].yes_bid ?? 0) + (markets[1].yes_ask ?? 100)) / 2);
+    homeMid = Math.round(((markets[0].yes_bid ?? 0) + (markets[0].yes_ask ?? 100)) / 2);
+
+
+    // Fallback logic: If prices aren't explicitly identified, 
+    // use the Kalshi KXNBAGAME standard: YES = Away team wins.
+    if (awayMid !== null && homeMid === null) {
+      homeMid = 100 - awayMid;
+    } else if (homeMid !== null && awayMid === null) {
+      awayMid = 100 - homeMid;
+    }
+
+    // Update UI elements
+    const updateSide = (side, price, labelSuffix) => {
+      const ml = centsToAmerican(price);
+      document.getElementById(`k-${side}-price`).textContent = `${price}¢`;
+      document.getElementById(`k-${side}-implied`).textContent = `Implied: ${price}% · ${labelSuffix}`;
+      document.getElementById(`k-${side}-ml`).textContent = `Moneyline: ${formatAmerican(ml)}`;
+    };
+
+    updateSide('away', awayMid, `YES Price`);
+    updateSide('home', homeMid, `Derived (100 - ${awayMid})`);
+
+    // Use the actual event ticker returned by the API
+    const finalTicker = eventData.event?.ticker || eventTicker;
+    
+    // Update the link and the status text
+    statusEl.textContent = `Market: ${finalTicker} · Updated ${new Date().toLocaleTimeString()}`;
+    
+    const linkEl = document.getElementById('kalshi-link');
+    // Kalshi uses /markets/ for specific tickers or /events/ for the general event
+    linkEl.href = `https://kalshi.com/markets/${series}/${game_level}/${finalTicker}`;
+    linkEl.style.display = 'block';
+
+    // Refresh Edge Calculator
+    const homeWPEl = document.getElementById('home-pct').textContent;
+    if (homeWPEl && homeWPEl !== '—') recalcEdge(parseInt(homeWPEl) / 100);
+
+    lastKalshiData = { awayMid: awayMid, homeMid: homeMid };
+  } catch (e) {
+    statusEl.textContent = `Update Error: ${e.message}`;
+  }
+}
+
+function recalcEdge(espnHomeWP, isStarted) {
+  // Ensure we have the Kalshi data before proceeding
+  if (!lastKalshiData) return;
+  const { homeMid, awayMid } = lastKalshiData;
+
+  const edgeSection = document.getElementById('edge-section');
+  const edgeValue = document.getElementById('edge-value');
+  const edgeBetOn = document.getElementById('edge-bet-on');
+
+  const espnHomePct = Math.round(espnHomeWP * 100);
+  const espnAwayPct = 100 - espnHomePct;
+
+  const homeEdge = espnHomePct - homeMid;  
+  const awayEdge = espnAwayPct - awayMid;  
+
+  const THRESHOLD = 7;
+  edgeSection.style.display = 'block'; // Ensure section is visible
+
+  let bestEdge = 0;
+  let targetTeam = "";
+  
+  // Identify the best positive edge (where ESPN % > Kalshi Price)
+  if (homeEdge >= awayEdge) {
+    bestEdge = homeEdge;
+    targetTeam = activeTeams.home;
+  } else {
+    bestEdge = awayEdge;
+    targetTeam = activeTeams.away;
+  }
+
+  const hasBet = bestEdge >= THRESHOLD;
+  edgeValue.textContent = `${bestEdge > 0 ? '+' : ''}${bestEdge} pts`;
+  edgeValue.className = `edge-value ${hasBet ? 'positive' : 'neutral'}`;
+
+  // Toggle labels based on game start status
+  const labelText = isStarted ? "LIVE VALUE DETECTED" : "PREGAME EDGE DETECTED";
+  const labelColor = isStarted ? 'var(--accent)' : 'var(--kalshi)';
+
+  let html = `
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1rem; font-size:0.7rem;">
+      <div>
+        <span style="color:var(--muted);">${activeTeams.home}</span><br>
+        Model: <strong>${espnHomePct}%</strong> · Market: <strong>${homeMid}¢</strong><br>
+        Edge: <span style="color:${homeEdge >= THRESHOLD ? 'var(--accent)' : 'var(--muted)'}">${homeEdge > 0 ? '+' : ''}${homeEdge} pts</span>
+      </div>
+      <div>
+        <span style="color:var(--muted);">${activeTeams.away}</span><br>
+        Model: <strong>${espnAwayPct}%</strong> · Market: <strong>${awayMid}¢</strong><br>
+        Edge: <span style="color:${awayEdge >= THRESHOLD ? 'var(--accent)' : 'var(--muted)'}">${awayEdge > 0 ? '+' : ''}${awayEdge} pts</span>
+      </div>
+    </div>
+  `;
+
+  if (hasBet) {
+    html += `
+      <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
+        <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
+          ● ${labelText}
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
+          BUY ${targetTeam} YES
+        </div>
+        <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
+          Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
+        </div>
+      </div>
+    `;
+  } else {
+    html += `<div style="border:1px solid var(--border); padding:0.75rem; color:var(--muted); font-size:0.7rem;">○ Market aligned with model — no significant edge</div>`;
+  }
+
+  edgeBetOn.innerHTML = html;
+}
+
+function drawChart(history, started) {
+  const canvas = document.getElementById('wp-chart');
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const W = rect.width;
+  const H = 160;
+
+  // 1. Set up dimensions and DPR scaling (once for both states)
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // 2. Define Theme Colors
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const bgColor = isLight ? '#f4f4f4' : '#0d0d0d';
+  const gridColor = isLight ? '#dddddd' : '#2a2a2a';
+  const accentColor = isLight ? '#7ca100' : '#c8f135'; // Darker green for light mode contrast
+  const textColor = isLight ? '#1a1a1a' : '#c8f135';
+  const mutedTextColor = isLight ? '#777777' : '#444444';
+
+  // 3. Draw Background
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, W, H);
+
+  // 4. Handle "Not Started" or "No Data" State
+  if (!started || history.length < 2) {
+    ctx.fillStyle = textColor;
+    ctx.font = 'bold 24px "Bebas Neue", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText("GAME HASN'T STARTED YET... COME BACK LATER", W / 2, H / 2);
+    return;
+  }
+
+  // 5. Draw Chart for Live/Finished Games
+  const pad = { top: 10, bottom: 20, left: 4, right: 4 };
+  const midY = pad.top + (H - pad.top - pad.bottom) * 0.5;
+
+  const xStep = (W - pad.left - pad.right) / (history.length - 1);
+  const toX = i => pad.left + i * xStep;
+  const toY = v => pad.top + (1 - v) * (H - pad.top - pad.bottom);
+
+  // Draw 50% Midline (Dashed)
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, midY);
+  ctx.lineTo(W - pad.right, midY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw Gradient Area (Under the line)
+  const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+  if (isLight) {
+    grad.addColorStop(0, 'rgba(124, 161, 0, 0.2)');
+    grad.addColorStop(0.5, 'rgba(124, 161, 0, 0.05)');
+    grad.addColorStop(1, 'rgba(255, 77, 109, 0.1)'); 
+  } else {
+    grad.addColorStop(0, 'rgba(200, 241, 53, 0.3)');
+    grad.addColorStop(0.5, 'rgba(200, 241, 53, 0.05)');
+    grad.addColorStop(1, 'rgba(255, 77, 109, 0.15)');
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(history[0]));
+  history.forEach((v, i) => { if (i > 0) ctx.lineTo(toX(i), toY(v)); });
+  ctx.lineTo(toX(history.length - 1), H - pad.bottom);
+  ctx.lineTo(toX(0), H - pad.bottom);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Draw Main Chart Line
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(history[0]));
+  history.forEach((v, i) => { if (i > 0) ctx.lineTo(toX(i), toY(v)); });
+  ctx.strokeStyle = accentColor;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // Draw Latest Point Dot
+  const lastX = toX(history.length - 1);
+  const lastY = toY(history[history.length - 1]);
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = accentColor;
+  ctx.fill();
+
+  // Draw Percentage Labels (Y-Axis)
+  ctx.fillStyle = mutedTextColor;
+  ctx.font = '10px "IBM Plex Mono"';
+  ctx.textAlign = 'right';
+  [0.25, 0.5, 0.75].forEach(v => {
+    ctx.fillText(`${v * 100}%`, W - pad.right, toY(v) - 3);
+  });
+}
+
+async function checkAllGamesForEdge() {
+  const cards = document.querySelectorAll('.game-card');
+  for (const card of cards) {
+    const gameId = card.dataset.id;
+    if (!gameId) continue;
+    try {
+      // Get ESPN win prob
+      const espnData = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
+      const wpData = espnData.winprobability || [];
+      if (!wpData.length) continue;
+      const homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
+
+      // Get team abbrs from card
+      const comp = espnData.header?.competitions?.[0];
+      if (!comp) continue;
+      const home = comp.competitors.find(c => c.homeAway === 'home');
+      const away = comp.competitors.find(c => c.homeAway === 'away');
+      if (!home || !away) continue;
+
+      const awayK = toKalshiAbbr(away.team.abbreviation);
+      const homeK = toKalshiAbbr(home.team.abbreviation);
+      const dateStr = kalshiDateStr(new Date());
+      const series2 = activeSport === 'nba' ? 'KXNBAGAME' : 'KXCBBGAME';
+      const eventTicker = `${series2}-${dateStr}${awayK}${homeK}`;
+
+      const eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
+      const markets = eventData.event?.markets || [];
+      const m = markets.find(m => m.title?.toUpperCase().includes(awayK)) || markets[0];
+      if (!m) continue;
+
+      const awayMid = Math.round(((m.yes_bid ?? 0) + (m.yes_ask ?? 100)) / 2);
+      const homeMid = 100 - awayMid;
+
+      const espnH = Math.round(homeWP * 100);
+      const espnA = 100 - espnH;
+      const homeGap = Math.abs(espnH - homeMid);
+      const awayGap = Math.abs(espnA - awayMid);
+      const bestGap = Math.max(homeGap, awayGap);
+
+      if (bestGap >= THRESHOLD) {
+        card.classList.add('value-bet');
+      } else {
+        card.classList.remove('value-bet');
+      }
+    } catch(e) {
+      // silently skip — market may not exist yet
+    }
+  }
+}
+
+async function updateSidebarMeters() {
+  const cards = document.querySelectorAll('.game-card');
+  for (const card of cards) {
+    const gameId = card.dataset.id;
+    try {
+      // Fetch summary for each game to get the most recent probability
+      const data = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
+      const wpData = data.winprobability || [];
+      const predictorData = data.predictor;
+      
+      let homeWP = 0.5;
+      if (wpData.length > 0) {
+        homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
+      } else if (predictorData?.homeTeam) {
+        homeWP = predictorData.homeTeam.gameProjection / 100;
+      }
+      
+      card.style.setProperty('--home-wp', `${homeWP * 100}%`);
+    } catch (e) {
+      console.warn(`Could not update meter for game ${gameId}`);
+    }
+  }
+}
+
+// ── Boot + midnight PST reload ────────────────────────────────────────────────
+let currentPSTDate = getPSTDateParam();
+
+function scheduleMidnightReload() {
+  // Calculate ms until next midnight PST
+  const now = new Date();
+  const pstNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  const pstMidnight = new Date(pstNow);
+  pstMidnight.setHours(24, 0, 0, 0); // next midnight PST
+  const msUntilMidnight = pstMidnight - pstNow;
+
+  setTimeout(() => {
+    currentPSTDate = getPSTDateParam();
+    loadGames();           // reload fresh day's slate
+    checkAllGamesForEdge();
+    scheduleMidnightReload(); // reschedule for next midnight
+  }, msUntilMidnight);
+}
+
+setInterval(checkAllGamesForEdge, 10000);
+checkAllGamesForEdge();
+
+loadGames();
+setInterval(loadGames, 60000);
+scheduleMidnightReload();
+</script>
+</body>
+</html>
