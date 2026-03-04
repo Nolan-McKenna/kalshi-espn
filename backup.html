@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalshi/ESPN NBA Bets</title>
+<link rel="icon" type="image/png" href="ing/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -165,7 +166,7 @@
 
   .live-tag {
     display: inline-block;
-    background: var(--away);
+    background: red;
     color: #fff;
     font-size: 0.55rem;
     padding: 2px 6px;
@@ -408,6 +409,162 @@
 
   .pregame-label:hover { opacity: 1; }
 
+
+
+  /* ── Live Value Bets Panel ──────────────────────────────────────────────── */
+  #live-value-panel {
+    display: none;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+  }
+  #live-value-panel.visible { display: block; }
+  #live-value-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  #live-value-header .lv-title {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .lv-ws-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .lv-ws-dot.connected { background: var(--accent); animation: pulse 1.5s infinite; }
+  .lv-ws-dot.error { background: var(--away); animation: none; }
+  #lv-ws-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  #live-value-bets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  .lv-bet-card {
+    padding: 0.85rem 1rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .lv-bet-card:hover { background: var(--chart-bg); }
+  .lv-bet-card.lv-live  { border-left: 2px solid red; }
+  .lv-bet-card.lv-pre   { border-left: 2px solid var(--kalshi); }
+  .lv-bet-matchup {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1rem;
+  }
+  .lv-bet-action {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+  .lv-bet-detail {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 0.18rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .lv-edge-badge {
+    position: absolute;
+    top: 0.65rem; right: 0.7rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+  .lv-tag {
+    display: inline-block;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .lv-tag.live { background: red; color: #fff; }
+  .lv-tag.pre  { background: var(--kalshi); color: #fff; }
+  #live-value-empty {
+    padding: 0.75rem 1rem;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .lvp-card {
+    padding: 0.85rem 1rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .lvp-card:hover { background: var(--chart-bg); }
+
+  .lvp-matchup {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1rem;
+  }
+
+  .lvp-action {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+
+  .lvp-detail {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 0.18rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lvp-edge-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    color: var(--accent);
+  }
+
+  .lvp-live-tag {
+    display: inline-block;
+    background: red;
+    color: #fff;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
   /* Logo Styling */
   .team-icon {
     width: 45px;
@@ -444,6 +601,22 @@
 </header>
 
 <div id="status-bar"><span class="dot"></span> Fetching live games...</div>
+
+
+<!-- Live Value Bets Panel (WebSocket-powered) -->
+<div id="live-value-panel">
+  <div id="live-value-header">
+    <div class="lv-title">
+      <span class="lv-ws-dot" id="lv-ws-dot"></span>
+      ▲ Live Value Bets
+    </div>
+    <span id="lv-ws-label">Connecting…</span>
+  </div>
+  <div id="live-value-bets-grid">
+    <div id="live-value-empty">Scanning markets for edges…</div>
+  </div>
+</div>
+
 <div id="error-msg"></div>
 <div id="games-grid"></div>
 
@@ -526,12 +699,13 @@
   </div>
 
   <div id="poll-status">Polling every 15s</div>
+  <div id="kalshi-ws-status" style="font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.3rem; text-align:right;"></div>
 </div>
 
 <script>
 const ESPN_NBA    = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 const ESPN_CBB    = 'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball';
-const KALSHI_BASE = 'http://localhost:3000/kalshi';
+const KALSHI_BASE = '/kalshi';
 
 let activeSport   = 'nba';   // 'nba' | 'cbb'
 let ESPN_BASE     = ESPN_NBA;
@@ -552,12 +726,20 @@ function setSport(sport) {
   document.getElementById('sport-label').textContent =
     sport === 'nba' ? 'NBA · ESPN + Kalshi' : 'CBB Top 25 · ESPN + Kalshi';
 
-  // Stop any active polling
+  // Stop any active polling and close Kalshi WebSockets
   if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
   if (window.kalshiTimer) { clearTimeout(window.kalshiTimer); window.kalshiTimer = null; }
+  closeKalshiWS();
+  closeGridWS();
   activeGameId = null;
   activeTeams = { home: '', away: '' };
   lastKalshiData = null;
+  // Clear edge ticker for sport switch
+  Object.keys(allEdgeData).forEach(k => delete allEdgeData[k]);
+
+  renderLiveValuePanel();
+  const lv = document.getElementById('live-value-panel');
+  if (lv) lv.classList.remove('visible');
   document.getElementById('detail').classList.remove('visible');
 
   loadGames();
@@ -566,7 +748,7 @@ function setSport(sport) {
 const themeBtn = document.getElementById('theme-toggle');
 
 // 1. Check for saved preference on load
-const savedTheme = localStorage.getItem('theme') || 'dark';
+const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 updateToggleButton(savedTheme);
 
@@ -596,24 +778,18 @@ const ESPN_TO_KALSHI = {
   'UTAH': 'UTA',
   'WSH': 'WAS',
 
-  'CONN': 'UCONN',    // ESPN: UConn -> Kalshi: UCONN
-  'KU': 'KAN',        // ESPN: KU (Kansas) -> Kalshi: KAN
-  'UK': 'KTY',        // ESPN: UK (Kentucky) -> Kalshi: KTY
-  'ALA': 'BAMA',      // ESPN: ALA -> Kalshi: BAMA
-  'ARIZ': 'ZONA',     // ESPN: ARIZ -> Kalshi: ZONA
-  'MSU': 'MIST',      // ESPN: MSU (Mich St) -> Kalshi: MIST
+  'ALA': 'ALA',      // ESPN: ALA -> Kalshi: BAMA
   'MISS': 'OLEM',     // ESPN: MISS (Ole Miss) -> Kalshi: OLEM
   'WISC': 'WIS',      // ESPN: WISC -> Kalshi: WIS
-  'PUR': 'PURD',      // ESPN: PUR -> Kalshi: PURD
-  'VILL': 'VIL',      // ESPN: VILL -> Kalshi: VIL
   'STJU': 'SJU',      // ESPN: STJN (St. Johns) -> Kalshi: SJU
   'NCST': 'NCSU',     // ESPN: NCST -> Kalshi: NCSU
   'FSU': 'FLST',      // ESPN: FSU -> Kalshi: FLST
-  'OSU': 'OHST',      // ESPN: OSU (Ohio St) -> Kalshi: OHST
   'WAKE': 'WF',       // ESPN: WAKE -> Kalshi: WF
   'OKLA': 'OU',       // ESPN: OKLA -> Kalshi: OU
-  'WVU': 'WVA',
-  'M-OH': 'MOH'
+  'M-OH': 'MOH',
+  'IU': 'IND',
+  'LUC': 'LCHI',
+  'NU': 'NW'
 };
 
 function toKalshiAbbr(espnAbbr) {
@@ -839,7 +1015,8 @@ async function loadGames() {
       grid.appendChild(card);
     });
 
-    updateSidebarMeters();
+    // Subscribe all game markets to grid WebSocket (async, non-blocking)
+    subscribeAllGamesToGridWS();
 
     hideError();
   } catch (e) {
@@ -865,16 +1042,14 @@ async function selectGame(gameId, teams) {
   document.getElementById('k-away-team').textContent = teams.away;
   document.getElementById('detail').classList.add('visible');
 
-  // 2. Clear all existing timers to prevent "double-polling"
+  // 2. Clear all existing timers and close any existing Kalshi WebSocket
   if (pollTimer) clearTimeout(pollTimer);
-  if (window.kalshiTimer) clearTimeout(window.kalshiTimer);
+  if (window.kalshiTimer) { clearTimeout(window.kalshiTimer); window.kalshiTimer = null; }
+  closeKalshiWS();
+  kalshiWsGameId = null;
 
-  // 3. Independent Kalshi Loop (Always 2 seconds)
-  const runKalshiLoop = async () => {
-    if (activeGameId !== gameId) return; // Kill loop if game changed
-    await fetchKalshiOdds();
-    window.kalshiTimer = setTimeout(runKalshiLoop, 2000);
-  };
+  // 3. Kalshi: one REST call to discover market + then WebSocket takes over
+  fetchKalshiOdds();
 
   // 4. Independent ESPN Loop (Variable: 15s or 30m)
   const runESPNLoop = async () => {
@@ -895,8 +1070,7 @@ async function selectGame(gameId, teams) {
     pollTimer = setTimeout(runESPNLoop, nextInterval);
   };
 
-  // Initial immediate execution of both
-  runKalshiLoop();
+  // Initial immediate execution of ESPN loop
   runESPNLoop();
 }
 
@@ -991,7 +1165,180 @@ async function updateWinProb() {
 
 let lastKalshiData = null;
 
+// ── Kalshi WebSocket Streaming ────────────────────────────────────────────────
+let kalshiWS = null;
+let kalshiWsGameId = null;          // tracks which game the WS was opened for
+let kalshiMarketTickers = [];       // [homeTicker, awayTicker]
+let kalshiMarketState = {};         // ticker → { yes_bid, yes_ask }
+let kalshiWsReconnectTimer = null;
+let kalshiWsSeqId = 1;
 
+const KALSHI_WS_URL = 'wss://api.elections.kalshi.com/trade-api/ws/v2';
+
+function setKalshiWsStatus(msg, color) {
+  const el = document.getElementById('kalshi-ws-status');
+  if (el) {
+    el.textContent = msg;
+    el.style.color = color || 'var(--muted)';
+  }
+}
+
+function closeKalshiWS() {
+  if (kalshiWsReconnectTimer) { clearTimeout(kalshiWsReconnectTimer); kalshiWsReconnectTimer = null; }
+  if (kalshiWS) {
+    kalshiWS.onclose = null; // prevent reconnect on intentional close
+    kalshiWS.onerror = null;
+    kalshiWS.close();
+    kalshiWS = null;
+  }
+  kalshiMarketTickers = [];
+  kalshiMarketState = {};
+  kalshiWsSeqId = 1;
+}
+
+function openKalshiWS(tickers, finalTicker, series, game_level) {
+  closeKalshiWS();
+  kalshiMarketTickers = tickers;
+  const wsGameId = activeGameId; // capture for closure
+
+  const ws = new WebSocket(KALSHI_WS_URL);
+  kalshiWS = ws;
+
+  ws.onopen = () => {
+    if (activeGameId !== wsGameId) { ws.close(); return; }
+    setKalshiWsStatus('● WS connected — subscribing…', 'var(--accent)');
+
+    // Subscribe to orderbook_delta for each market ticker
+    const cmd = {
+      id: kalshiWsSeqId++,
+      cmd: 'subscribe',
+      params: {
+        channels: ['orderbook_delta'],
+        market_tickers: tickers
+      }
+    };
+    ws.send(JSON.stringify(cmd));
+  };
+
+  ws.onmessage = (evt) => {
+    if (activeGameId !== wsGameId) { ws.close(); return; }
+    try {
+      const msg = JSON.parse(evt.data);
+      handleKalshiWsMessage(msg, finalTicker, series, game_level);
+    } catch(e) { /* ignore parse errors */ }
+  };
+
+  ws.onerror = (err) => {
+    setKalshiWsStatus('WS error — falling back to REST', 'var(--away)');
+    console.warn('Kalshi WS error', err);
+  };
+
+  ws.onclose = (evt) => {
+    if (activeGameId !== wsGameId) return; // game changed, don't reconnect
+    setKalshiWsStatus(`WS closed (${evt.code}) — reconnecting…`, 'var(--muted)');
+    kalshiWsReconnectTimer = setTimeout(() => {
+      if (activeGameId === wsGameId) openKalshiWS(tickers, finalTicker, series, game_level);
+    }, 3000);
+  };
+}
+
+function handleKalshiWsMessage(msg, finalTicker, series, game_level) {
+  const type = msg.type;
+
+  // Subscription confirmation
+  if (type === 'subscribed') {
+    setKalshiWsStatus(`● LIVE  ${finalTicker}`, 'var(--accent)');
+    // Update Kalshi link
+    const linkEl = document.getElementById('kalshi-link');
+    linkEl.href = `https://kalshi.com/markets/${series}/${game_level}/${finalTicker}`;
+    linkEl.style.display = 'block';
+    return;
+  }
+
+  // Orderbook snapshot or delta
+  if (type === 'orderbook_snapshot' || type === 'orderbook_delta') {
+    const ticker = msg.market_ticker;
+    if (!ticker) return;
+
+    if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = { yes_bid: null, yes_ask: null };
+    const state = kalshiMarketState[ticker];
+
+    // Kalshi sends yes/no bids as arrays of [price, size] pairs sorted best-first
+    if (msg.yes !== undefined) {
+      // yes array: [[price,size],...] best bid is index 0
+      const yesBids = msg.yes;
+      state.yes_bid = (yesBids && yesBids.length > 0) ? yesBids[0][0] : state.yes_bid;
+    }
+    if (msg.no !== undefined) {
+      // no array best ask for yes = 100 - best no bid
+      const noBids = msg.no;
+      state.yes_ask = (noBids && noBids.length > 0) ? 100 - noBids[0][0] : state.yes_ask;
+    }
+
+    // For delta updates, process individual price level changes
+    if (type === 'orderbook_delta') {
+      if (msg.price !== undefined && msg.side !== undefined) {
+        // Delta: { side: 'yes'|'no', price, delta }
+        // We just re-request best prices from state after update
+        if (msg.side === 'yes' && msg.delta > 0) state.yes_bid = msg.price;
+        if (msg.side === 'no'  && msg.delta > 0) state.yes_ask = 100 - msg.price;
+      }
+    }
+
+    renderKalshiFromState();
+    return;
+  }
+
+  // ticker update (simpler price update message)
+  if (type === 'ticker') {
+    const ticker = msg.market_ticker;
+    if (!ticker) return;
+    if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = {};
+    if (msg.yes_bid != null) kalshiMarketState[ticker].yes_bid = msg.yes_bid;
+    if (msg.yes_ask != null) kalshiMarketState[ticker].yes_ask = msg.yes_ask;
+    renderKalshiFromState();
+  }
+}
+
+function renderKalshiFromState() {
+  const tickers = kalshiMarketTickers;
+  if (!tickers || tickers.length < 2) return;
+
+  const homeTicker = tickers[0];
+  const awayTicker = tickers[1];
+  const homeState  = kalshiMarketState[homeTicker] || {};
+  const awayState  = kalshiMarketState[awayTicker] || {};
+
+  const homeMid = (homeState.yes_bid != null && homeState.yes_ask != null)
+    ? Math.round((homeState.yes_bid + homeState.yes_ask) / 2)
+    : (homeState.yes_bid ?? homeState.yes_ask ?? null);
+
+  const awayMid = (awayState.yes_bid != null && awayState.yes_ask != null)
+    ? Math.round((awayState.yes_bid + awayState.yes_ask) / 2)
+    : (awayState.yes_bid ?? awayState.yes_ask ?? null);
+
+  if (homeMid == null || awayMid == null) return;
+
+  const updateSide = (side, price, labelSuffix) => {
+    const ml = centsToAmerican(price);
+    document.getElementById(`k-${side}-price`).textContent = `${price}¢`;
+    document.getElementById(`k-${side}-implied`).textContent = `Implied: ${price}% · ${labelSuffix}`;
+    document.getElementById(`k-${side}-ml`).textContent = `Moneyline: ${formatAmerican(ml)}`;
+  };
+
+  updateSide('home', homeMid, 'YES Price');
+  updateSide('away', awayMid, 'YES Price');
+
+  document.getElementById('kalshi-status').textContent =
+    `Updated ${new Date().toLocaleTimeString()}`;
+
+  lastKalshiData = { homeMid, awayMid };
+
+  const homeWPEl = document.getElementById('home-pct').textContent;
+  if (homeWPEl && homeWPEl !== '—') recalcEdge(parseInt(homeWPEl) / 100);
+}
+
+// Initial REST fetch to discover market tickers, then hand off to WebSocket
 async function fetchKalshiOdds() {
   const statusEl = document.getElementById('kalshi-status');
   try {
@@ -999,11 +1346,9 @@ async function fetchKalshiOdds() {
     const homeK = toKalshiAbbr(activeTeams.home);
     const dateStr = kalshiDateStr(new Date());
 
-    // Series ticker: NBA uses KXNBAGAME, CBB uses KXNCAAMBGAME
-    const series   = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
+    const series    = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
     const game_level = activeSport === 'nba' ? 'professional-basketball-game' : 'mens-college-basketball-mens-game';
     const eventTicker = `${series}-${dateStr}${awayK}${homeK}`;
-    statusEl.textContent = `Syncing Kalshi: ${awayK} @ ${homeK}...`;
 
     let eventData;
     try {
@@ -1015,7 +1360,6 @@ async function fetchKalshiOdds() {
         return t.includes(awayK) && t.includes(homeK);
       });
       if (!match) {
-        console.log(`debug: ${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`)
         statusEl.textContent = `No active market found for ${activeTeams.away} @ ${activeTeams.home}`;
         return;
       }
@@ -1025,51 +1369,45 @@ async function fetchKalshiOdds() {
     const markets = eventData.event?.markets || [];
     if (markets.length === 0) return;
 
-    let awayMid = null;
-    let homeMid = null;
+    // Seed initial prices from REST snapshot
+    let homeMid = Math.round(((markets[0].yes_bid ?? 0) + (markets[0].yes_ask ?? 100)) / 2);
+    let awayMid = Math.round(((markets[1].yes_bid ?? 0) + (markets[1].yes_ask ?? 100)) / 2);
 
-    // away index 1, home index 0
-    awayMid = Math.round(((markets[1].yes_bid ?? 0) + (markets[1].yes_ask ?? 100)) / 2);
-    homeMid = Math.round(((markets[0].yes_bid ?? 0) + (markets[0].yes_ask ?? 100)) / 2);
-
-
-    // Fallback logic: If prices aren't explicitly identified, 
-    // use the Kalshi KXNBAGAME standard: YES = Away team wins.
-    if (awayMid !== null && homeMid === null) {
-      homeMid = 100 - awayMid;
-    } else if (homeMid !== null && awayMid === null) {
-      awayMid = 100 - homeMid;
-    }
-
-    // Update UI elements
     const updateSide = (side, price, labelSuffix) => {
       const ml = centsToAmerican(price);
       document.getElementById(`k-${side}-price`).textContent = `${price}¢`;
       document.getElementById(`k-${side}-implied`).textContent = `Implied: ${price}% · ${labelSuffix}`;
       document.getElementById(`k-${side}-ml`).textContent = `Moneyline: ${formatAmerican(ml)}`;
     };
+    updateSide('home', homeMid, 'YES Price');
+    updateSide('away', awayMid, 'YES Price');
 
-    updateSide('away', awayMid, `YES Price`);
-    updateSide('home', homeMid, `Derived (100 - ${awayMid})`);
-
-    // Use the actual event ticker returned by the API
     const finalTicker = eventData.event?.ticker || eventTicker;
-    
-    // Update the link and the status text
-    statusEl.textContent = `Market: ${finalTicker} · Updated ${new Date().toLocaleTimeString()}`;
-    
+    statusEl.textContent = `Market: ${finalTicker}`;
+
     const linkEl = document.getElementById('kalshi-link');
-    // Kalshi uses /markets/ for specific tickers or /events/ for the general event
     linkEl.href = `https://kalshi.com/markets/${series}/${game_level}/${finalTicker}`;
     linkEl.style.display = 'block';
 
-    // Refresh Edge Calculator
+    lastKalshiData = { homeMid, awayMid };
+
     const homeWPEl = document.getElementById('home-pct').textContent;
     if (homeWPEl && homeWPEl !== '—') recalcEdge(parseInt(homeWPEl) / 100);
 
-    lastKalshiData = { awayMid: awayMid, homeMid: homeMid };
+    // Seed state for WS renderer
+    const homeTicker = markets[0].ticker;
+    const awayTicker = markets[1].ticker;
+    kalshiMarketState[homeTicker] = { yes_bid: markets[0].yes_bid, yes_ask: markets[0].yes_ask };
+    kalshiMarketState[awayTicker] = { yes_bid: markets[1].yes_bid, yes_ask: markets[1].yes_ask };
+
+    // Open WebSocket for real-time streaming (only if a new game was selected)
+    if (kalshiWsGameId !== activeGameId) {
+      kalshiWsGameId = activeGameId;
+      openKalshiWS([homeTicker, awayTicker], finalTicker, series, game_level);
+    }
   } catch (e) {
-    statusEl.textContent = `Update Error: ${e.message}`;
+    statusEl.textContent = `Kalshi Error: ${e.message}`;
+    setKalshiWsStatus('WS unavailable', 'var(--away)');
   }
 }
 
@@ -1089,21 +1427,28 @@ function recalcEdge(espnHomeWP, isStarted) {
   const awayEdge = espnAwayPct - awayMid;  
 
   const THRESHOLD = 7;
+  const ODDSTHRESHOLD = 25;
   edgeSection.style.display = 'block'; // Ensure section is visible
 
   let bestEdge = 0;
   let targetTeam = "";
+  let targetTeamOdds = 0.0;
   
   // Identify the best positive edge (where ESPN % > Kalshi Price)
   if (homeEdge >= awayEdge) {
     bestEdge = homeEdge;
     targetTeam = activeTeams.home;
+    targetTeamOdds = espnHomePct;
   } else {
     bestEdge = awayEdge;
     targetTeam = activeTeams.away;
+    targetTeamOdds = espnAwayPct;
   }
 
   const hasBet = bestEdge >= THRESHOLD;
+  const ignore = targetTeamOdds < ODDSTHRESHOLD;
+
+
   edgeValue.textContent = `${bestEdge > 0 ? '+' : ''}${bestEdge} pts`;
   edgeValue.className = `edge-value ${hasBet ? 'positive' : 'neutral'}`;
 
@@ -1126,22 +1471,40 @@ function recalcEdge(espnHomeWP, isStarted) {
     </div>
   `;
 
-  if (hasBet) {
+  if (ignore) {
     html += `
-      <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
-        <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
-          ● ${labelText}
+        <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
+          <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
+            ● ${labelText}
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
+            IGNORE EDGE, TARGET TEAM WIN PROBABILITY <${ODDSTHRESHOLD}%
+          </div>
+          <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
+            Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
+          </div>
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
-          BUY ${targetTeam} YES
+      `;
+  } 
+  else {
+
+    if (hasBet) {
+      html += `
+        <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
+          <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
+            ● ${labelText}
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
+            BUY ${targetTeam} YES
+          </div>
+          <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
+            Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
+          </div>
         </div>
-        <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
-          Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
-        </div>
-      </div>
-    `;
-  } else {
-    html += `<div style="border:1px solid var(--border); padding:0.75rem; color:var(--muted); font-size:0.7rem;">○ Market aligned with model — no significant edge</div>`;
+      `;
+    } else {
+      html += `<div style="border:1px solid var(--border); padding:0.75rem; color:var(--muted); font-size:0.7rem;">○ Market aligned with model — no significant edge</div>`;
+    }
   }
 
   edgeBetOn.innerHTML = html;
@@ -1253,77 +1616,325 @@ function drawChart(history, started) {
   });
 }
 
-async function checkAllGamesForEdge() {
+// ── Grid-Level Kalshi WebSocket ───────────────────────────────────────────────
+// One shared WS for all game cards on the current page.
+// Stores edge data per gameId: { home, away, homeEdge, awayEdge, bestTeam, bestEdge, isLive,
+//                                 homeMid, awayMid, homeWP, homeTicker, awayTicker, gameId }
+const allEdgeData = {};
+
+// Maps market_ticker → gameId so WS messages can be routed
+const tickerToGameId = {};
+
+// Maps gameId → { homeTicker, awayTicker, espnHomeWP, homeAbbr, awayAbbr, isLive }
+const gameMarketMeta = {};
+
+let gridWS = null;
+let gridWSReconnectTimer = null;
+let gridWSSubscribedTickers = new Set();
+let gridWSSeqId = 100; // use range 100+ to avoid collision with detail WS
+
+function setLvpWsStatus(msg, color) {
+  const dot   = document.getElementById('lv-ws-dot');
+  const label = document.getElementById('lv-ws-label');
+  if (label) { label.textContent = msg; label.style.color = color || ''; }
+  if (dot) {
+    dot.className = 'lv-ws-dot';
+    if (color === 'var(--accent)') dot.classList.add('connected');
+    else if (color === 'var(--away)') dot.classList.add('error');
+  }
+}
+
+function closeGridWS() {
+  if (gridWSReconnectTimer) { clearTimeout(gridWSReconnectTimer); gridWSReconnectTimer = null; }
+  if (gridWS) {
+    gridWS.onclose = null;
+    gridWS.onerror = null;
+    gridWS.close();
+    gridWS = null;
+  }
+  gridWSSubscribedTickers.clear();
+}
+
+function openGridWS(tickers) {
+  if (!tickers || tickers.length === 0) return;
+  closeGridWS();
+  gridWSSubscribedTickers = new Set(tickers);
+
+  const ws = new WebSocket('wss://api.elections.kalshi.com/trade-api/ws/v2');
+  gridWS = ws;
+
+  ws.onopen = () => {
+    setLvpWsStatus('● Connected — streaming prices', 'var(--accent)');
+    ws.send(JSON.stringify({
+      id: gridWSSeqId++,
+      cmd: 'subscribe',
+      params: { channels: ['orderbook_delta'], market_tickers: tickers }
+    }));
+  };
+
+  ws.onmessage = (evt) => {
+    try {
+      handleGridWsMessage(JSON.parse(evt.data));
+    } catch(e) {}
+  };
+
+  ws.onerror = () => setLvpWsStatus('WS error', 'var(--away)');
+
+  ws.onclose = (evt) => {
+    setLvpWsStatus(`Reconnecting… (${evt.code})`, 'var(--muted)');
+    gridWSReconnectTimer = setTimeout(() => openGridWS([...gridWSSubscribedTickers]), 4000);
+  };
+}
+
+function handleGridWsMessage(msg) {
+  const type = msg.type;
+  const ticker = msg.market_ticker;
+
+  if (type === 'subscribed') {
+    setLvpWsStatus('● Live prices streaming', 'var(--accent)');
+    return;
+  }
+
+  if (!ticker) return;
+  const gameId = tickerToGameId[ticker];
+  if (!gameId) return;
+  const meta = gameMarketMeta[gameId];
+  if (!meta) return;
+
+  // Update the shared kalshiMarketState (same store used by detail panel)
+  if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = { yes_bid: null, yes_ask: null };
+  const state = kalshiMarketState[ticker];
+
+  if (type === 'orderbook_snapshot' || type === 'orderbook_delta') {
+    if (msg.yes !== undefined && msg.yes.length > 0) state.yes_bid = msg.yes[0][0];
+    if (msg.no  !== undefined && msg.no.length  > 0) state.yes_ask = 100 - msg.no[0][0];
+    if (type === 'orderbook_delta' && msg.price !== undefined) {
+      if (msg.side === 'yes' && msg.delta > 0) state.yes_bid = msg.price;
+      if (msg.side === 'no'  && msg.delta > 0) state.yes_ask = 100 - msg.price;
+    }
+  } else if (type === 'ticker') {
+    if (msg.yes_bid != null) state.yes_bid = msg.yes_bid;
+    if (msg.yes_ask != null) state.yes_ask = msg.yes_ask;
+  }
+
+  // Recalculate edge for this game
+  recomputeGameEdge(gameId);
+
+  // If this game is the active detail game, also update the detail panel
+  if (activeGameId === gameId) {
+    renderKalshiFromState();
+  }
+}
+
+function recomputeGameEdge(gameId) {
+  const meta = gameMarketMeta[gameId];
+  if (!meta) return;
+
+  const homeS = kalshiMarketState[meta.homeTicker] || {};
+  const awayS = kalshiMarketState[meta.awayTicker] || {};
+
+  const homeMid = (homeS.yes_bid != null && homeS.yes_ask != null)
+    ? Math.round((homeS.yes_bid + homeS.yes_ask) / 2)
+    : (homeS.yes_bid ?? homeS.yes_ask ?? null);
+  const awayMid = (awayS.yes_bid != null && awayS.yes_ask != null)
+    ? Math.round((awayS.yes_bid + awayS.yes_ask) / 2)
+    : (awayS.yes_bid ?? awayS.yes_ask ?? null);
+
+  if (homeMid == null || awayMid == null) return;
+
+  const espnH = Math.round(meta.espnHomeWP * 100);
+  const espnA = 100 - espnH;
+  const homeEdge = espnH - homeMid;
+  const awayEdge = espnA - awayMid;
+  const bestEdge = homeEdge >= awayEdge ? homeEdge : awayEdge;
+  const bestTeam = homeEdge >= awayEdge ? meta.homeAbbr : meta.awayAbbr;
+
+  allEdgeData[gameId] = {
+    gameId,
+    home: meta.homeAbbr, away: meta.awayAbbr,
+    homeEdge, awayEdge, bestEdge, bestTeam,
+    homeMid, awayMid, espnH, espnA,
+    isLive: meta.isLive
+  };
+
+  const THRESHOLD = 7;
+  const gap = Math.max(Math.abs(homeEdge), Math.abs(awayEdge));
+  const card = document.querySelector(`.game-card[data-id="${gameId}"]`);
+  if (card) card.classList.toggle('value-bet', gap >= THRESHOLD);
+
+
+  renderLiveValuePanel();
+}
+
+// ── After games load, discover all Kalshi markets and subscribe via one WS ────
+async function subscribeAllGamesToGridWS() {
   const cards = document.querySelectorAll('.game-card');
+  const series = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
+  const allTickers = [];
+
+  // Reset state
+  Object.keys(tickerToGameId).forEach(k => delete tickerToGameId[k]);
+  Object.keys(gameMarketMeta).forEach(k => delete gameMarketMeta[k]);
+  Object.keys(allEdgeData).forEach(k => delete allEdgeData[k]);
+
+  setLvpWsStatus('Fetching markets…', '');
+
   for (const card of cards) {
     const gameId = card.dataset.id;
     if (!gameId) continue;
     try {
-      // Get ESPN win prob
+      // Get ESPN probabilities
       const espnData = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
       const wpData = espnData.winprobability || [];
-      if (!wpData.length) continue;
-      const homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
-
-      // Get team abbrs from card
+      const predictorData = espnData.predictor;
       const comp = espnData.header?.competitions?.[0];
       if (!comp) continue;
-      const home = comp.competitors.find(c => c.homeAway === 'home');
-      const away = comp.competitors.find(c => c.homeAway === 'away');
-      if (!home || !away) continue;
 
-      const awayK = toKalshiAbbr(away.team.abbreviation);
-      const homeK = toKalshiAbbr(home.team.abbreviation);
-      const dateStr = kalshiDateStr(new Date());
-      const series2 = activeSport === 'nba' ? 'KXNBAGAME' : 'KXCBBGAME';
-      const eventTicker = `${series2}-${dateStr}${awayK}${homeK}`;
+      const homeComp = comp.competitors.find(c => c.homeAway === 'home');
+      const awayComp = comp.competitors.find(c => c.homeAway === 'away');
+      if (!homeComp || !awayComp) continue;
 
-      const eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
-      const markets = eventData.event?.markets || [];
-      const m = markets.find(m => m.title?.toUpperCase().includes(awayK)) || markets[0];
-      if (!m) continue;
-
-      const awayMid = Math.round(((m.yes_bid ?? 0) + (m.yes_ask ?? 100)) / 2);
-      const homeMid = 100 - awayMid;
-
-      const espnH = Math.round(homeWP * 100);
-      const espnA = 100 - espnH;
-      const homeGap = Math.abs(espnH - homeMid);
-      const awayGap = Math.abs(espnA - awayMid);
-      const bestGap = Math.max(homeGap, awayGap);
-
-      if (bestGap >= THRESHOLD) {
-        card.classList.add('value-bet');
-      } else {
-        card.classList.remove('value-bet');
-      }
-    } catch(e) {
-      // silently skip — market may not exist yet
-    }
-  }
-}
-
-async function updateSidebarMeters() {
-  const cards = document.querySelectorAll('.game-card');
-  for (const card of cards) {
-    const gameId = card.dataset.id;
-    try {
-      // Fetch summary for each game to get the most recent probability
-      const data = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
-      const wpData = data.winprobability || [];
-      const predictorData = data.predictor;
-      
-      let homeWP = 0.5;
+      let homeWP = 0.5, isLive = false;
       if (wpData.length > 0) {
         homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
+        isLive = true;
       } else if (predictorData?.homeTeam) {
         homeWP = predictorData.homeTeam.gameProjection / 100;
       }
-      
+
+      const homeAbbr = homeComp.team.abbreviation;
+      const awayAbbr = awayComp.team.abbreviation;
+      const awayK = toKalshiAbbr(awayAbbr);
+      const homeK = toKalshiAbbr(homeAbbr);
+      const dateStr = kalshiDateStr(new Date());
+      const eventTicker = `${series}-${dateStr}${awayK}${homeK}`;
+
+      let markets;
+      try {
+        const eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
+        markets = eventData.event?.markets || [];
+      } catch(e) {
+        // Try search fallback
+        try {
+          const searchData = await fetchJSON(`${KALSHI_BASE}/markets?limit=100&series_ticker=${series}&status=open`);
+          const match = (searchData.markets || []).find(m => {
+            const t = m.ticker.toUpperCase();
+            return t.includes(awayK) && t.includes(homeK);
+          });
+          if (!match) continue;
+          const eventData2 = await fetchJSON(`${KALSHI_BASE}/events/${match.event_ticker}?with_nested_markets=true`);
+          markets = eventData2.event?.markets || [];
+        } catch(e2) { continue; }
+      }
+
+      if (!markets || markets.length < 2) continue;
+
+      const homeTicker = markets[0].ticker;
+      const awayTicker = markets[1].ticker;
+
+      // Seed initial state from REST snapshot
+      kalshiMarketState[homeTicker] = { yes_bid: markets[0].yes_bid ?? null, yes_ask: markets[0].yes_ask ?? null };
+      kalshiMarketState[awayTicker] = { yes_bid: markets[1].yes_bid ?? null, yes_ask: markets[1].yes_ask ?? null };
+
+      tickerToGameId[homeTicker] = gameId;
+      tickerToGameId[awayTicker] = gameId;
+      gameMarketMeta[gameId] = { homeTicker, awayTicker, espnHomeWP: homeWP, homeAbbr, awayAbbr, isLive };
+
+      allTickers.push(homeTicker, awayTicker);
+
+      // Update sidebar meter
       card.style.setProperty('--home-wp', `${homeWP * 100}%`);
-    } catch (e) {
-      console.warn(`Could not update meter for game ${gameId}`);
-    }
+
+      // Compute initial edge from REST data
+      recomputeGameEdge(gameId);
+
+    } catch(e) { /* skip game */ }
+  }
+
+  if (allTickers.length > 0) {
+    openGridWS(allTickers);
+  } else {
+    setLvpWsStatus('No Kalshi markets found', 'var(--muted)');
+  }
+}
+
+// ── ESPN win prob refresh (keeps WS edge data current) ────────────────────────
+async function refreshAllESPNProbs() {
+  const cards = document.querySelectorAll('.game-card');
+  for (const card of cards) {
+    const gameId = card.dataset.id;
+    if (!gameId || !gameMarketMeta[gameId]) continue;
+    try {
+      const data = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
+      const wpData = data.winprobability || [];
+      const predictorData = data.predictor;
+      const status = data.header?.competitions[0]?.status?.type?.name;
+      const isLive = ["STATUS_IN_PROGRESS","STATUS_HALFTIME","STATUS_END_PERIOD"].includes(status);
+
+      let homeWP = gameMarketMeta[gameId].espnHomeWP; // keep existing if no update
+      if (wpData.length > 0) homeWP = wpData[wpData.length - 1].homeWinPercentage ?? homeWP;
+      else if (predictorData?.homeTeam) homeWP = predictorData.homeTeam.gameProjection / 100;
+
+      gameMarketMeta[gameId].espnHomeWP = homeWP;
+      gameMarketMeta[gameId].isLive = isLive;
+      card.style.setProperty('--home-wp', `${homeWP * 100}%`);
+
+      recomputeGameEdge(gameId);
+    } catch(e) {}
+  }
+}
+
+
+
+function renderLiveValuePanel() {
+  const THRESHOLD = 7;
+  const IGNORE_BELOW = 25;
+  const panel = document.getElementById('live-value-panel');
+  const grid  = document.getElementById('live-value-bets-grid');
+
+  const bets = Object.values(allEdgeData).filter(d => Math.abs(d.bestEdge) >= THRESHOLD);
+
+  if (bets.length === 0) {
+    panel.classList.remove('visible');
+    return;
+  }
+
+  panel.classList.add('visible');
+
+  // Sort: live first, then by edge size
+  bets.sort((a, b) => {
+    if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
+    return Math.abs(b.bestEdge) - Math.abs(a.bestEdge);
+  });
+
+  grid.innerHTML = bets.map(d => {
+    const isBuy  = d.bestEdge > 0;
+    const sign   = isBuy ? '+' : '';
+    const ignore = (d.bestTeam === d.home ? d.espnH : d.espnA) < IGNORE_BELOW;
+    const action = ignore
+      ? `IGNORE — ${d.bestTeam} win prob < ${IGNORE_BELOW}%`
+      : (isBuy ? `BUY ${d.bestTeam} YES` : `SELL ${d.bestTeam} YES`);
+    const actionColor = ignore ? 'var(--away)' : 'var(--accent)';
+    const liveTag = d.isLive ? '<span class="lvp-live-tag">Live</span>' : '';
+
+    return `
+      <div class="lvp-card" data-gameid="${d.gameId}" onclick="lvpSelectGame('${d.gameId}')">
+        <div class="lvp-matchup">${d.home} <span style="color:var(--muted);font-size:0.8rem">vs</span> ${d.away}${liveTag}</div>
+        <div class="lvp-action" style="color:${actionColor}">${action}</div>
+        <div class="lvp-detail">
+          <span class="lvp-edge-badge">${sign}${d.bestEdge}pts</span>
+          Model: ${d.bestTeam === d.home ? d.espnH : d.espnA}% · Market: ${d.bestTeam === d.home ? d.homeMid : d.awayMid}¢
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── Helper to select game from Live Value Panel ───────────────────────────────
+function lvpSelectGame(gameId) {
+  const card = document.querySelector(`.game-card[data-id="${gameId}"]`);
+  if (card) {
+    card.click();
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
@@ -1331,23 +1942,22 @@ async function updateSidebarMeters() {
 let currentPSTDate = getPSTDateParam();
 
 function scheduleMidnightReload() {
-  // Calculate ms until next midnight PST
   const now = new Date();
   const pstNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
   const pstMidnight = new Date(pstNow);
-  pstMidnight.setHours(24, 0, 0, 0); // next midnight PST
+  pstMidnight.setHours(24, 0, 0, 0);
   const msUntilMidnight = pstMidnight - pstNow;
 
   setTimeout(() => {
     currentPSTDate = getPSTDateParam();
-    loadGames();           // reload fresh day's slate
-    checkAllGamesForEdge();
-    scheduleMidnightReload(); // reschedule for next midnight
+    loadGames();
+    scheduleMidnightReload();
   }, msUntilMidnight);
 }
 
-setInterval(checkAllGamesForEdge, 10000);
-checkAllGamesForEdge();
+// Refresh ESPN probabilities every 30s to keep edges accurate
+// (Kalshi prices update instantly via WebSocket)
+setInterval(refreshAllESPNProbs, 30000);
 
 loadGames();
 setInterval(loadGames, 60000);

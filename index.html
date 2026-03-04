@@ -116,10 +116,10 @@
     border-color: var(--card-home, #c8f135); 
     background: var(--surface); 
   }
-  .game-card.value-bet {
+  /* .game-card.value-bet {
     border-color: var(--card-home, #c8f135);
     box-shadow: 0 0 14px rgba(200,241,53,0.2);
-  }
+  } */
 
   .card-stripe {
     height: 6px;
@@ -375,10 +375,10 @@
   }
   .kalshi-link:hover { opacity: 1; }
 
-  .game-card.value-bet {
+  /* .game-card.value-bet {
     border-color: var(--accent);
     box-shadow: 0 0 12px rgba(200, 241, 53, 0.25);
-  }
+  } */
 
   .sport-btn {
     background: var(--surface);
@@ -409,6 +409,162 @@
 
   .pregame-label:hover { opacity: 1; }
 
+
+
+  /* ── Live Value Bets Panel ──────────────────────────────────────────────── */
+  #live-value-panel {
+    display: none;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+  }
+  #live-value-panel.visible { display: block; }
+  #live-value-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  #live-value-header .lv-title {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .lv-ws-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .lv-ws-dot.connected { background: var(--accent); animation: pulse 1.5s infinite; }
+  .lv-ws-dot.error { background: var(--away); animation: none; }
+  #lv-ws-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  #live-value-bets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+  .lv-bet-card {
+    padding: 0.85rem 1rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .lv-bet-card:hover { background: var(--chart-bg); }
+  .lv-bet-card.lv-live  { border-left: 2px solid red; }
+  .lv-bet-card.lv-pre   { border-left: 2px solid var(--kalshi); }
+  .lv-bet-matchup {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1rem;
+  }
+  .lv-bet-action {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+  .lv-bet-detail {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 0.18rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .lv-edge-badge {
+    position: absolute;
+    top: 0.65rem; right: 0.7rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+  .lv-tag {
+    display: inline-block;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .lv-tag.live { background: red; color: #fff; }
+  .lv-tag.pre  { background: var(--kalshi); color: #fff; }
+  #live-value-empty {
+    padding: 0.75rem 1rem;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .lvp-card {
+    padding: 0.85rem 1rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .lvp-card:hover { background: var(--chart-bg); }
+
+  .lvp-matchup {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1rem;
+  }
+
+  .lvp-action {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+
+  .lvp-detail {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 0.18rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lvp-edge-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    color: var(--accent);
+  }
+
+  .lvp-live-tag {
+    display: inline-block;
+    background: red;
+    color: #fff;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
   /* Logo Styling */
   .team-icon {
     width: 45px;
@@ -437,6 +593,7 @@
   <div style="display:flex; align-items:center; gap:0.5rem;">
     <button id="sport-nba" class="sport-btn active-sport" onclick="setSport('nba')">NBA</button>
     <button id="sport-cbb" class="sport-btn" onclick="setSport('cbb')">CBB Top 25</button>
+    <button id="tab-backtest" class="sport-btn" onclick="setView('backtest')">BACKTEST</button>
   </div>
   <span id="sport-label">NBA · ESPN + Kalshi</span>
   <button id="theme-toggle" style="margin-left: auto; background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; font-family: 'IBM Plex Mono'; font-size: 0.6rem;">
@@ -444,7 +601,24 @@
   </button>
 </header>
 
+<div id="games-view">
 <div id="status-bar"><span class="dot"></span> Fetching live games...</div>
+
+
+<!-- Live Value Bets Panel (WebSocket-powered) -->
+<div id="live-value-panel">
+  <div id="live-value-header">
+    <div class="lv-title">
+      <span class="lv-ws-dot" id="lv-ws-dot"></span>
+      ▲ Live Value Bets
+    </div>
+    <span id="lv-ws-label">Connecting…</span>
+  </div>
+  <div id="live-value-bets-grid">
+    <div id="live-value-empty">Scanning markets for edges…</div>
+  </div>
+</div>
+
 <div id="error-msg"></div>
 <div id="games-grid"></div>
 
@@ -527,7 +701,12 @@
   </div>
 
   <div id="poll-status">Polling every 15s</div>
+  <div id="kalshi-ws-status" style="font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.3rem; text-align:right;"></div>
 </div>
+
+</div><!-- /games-view -->
+
+<div id="backtest-view" style="display:none; padding-top:1rem;"></div>
 
 <script>
 const ESPN_NBA    = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
@@ -543,7 +722,9 @@ let pollTimer = null;
 let chartHistory = [];
 
 function setSport(sport) {
-  if (activeSport === sport) return;
+  // Always switch back to games view when a sport tab is clicked
+  if (activeView !== 'games') setView('games');
+  if (activeSport === sport && activeView === 'games') return;
   activeSport = sport;
   ESPN_BASE = sport === 'nba' ? ESPN_NBA : ESPN_CBB;
 
@@ -553,12 +734,20 @@ function setSport(sport) {
   document.getElementById('sport-label').textContent =
     sport === 'nba' ? 'NBA · ESPN + Kalshi' : 'CBB Top 25 · ESPN + Kalshi';
 
-  // Stop any active polling
+  // Stop any active polling and close Kalshi WebSockets
   if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
   if (window.kalshiTimer) { clearTimeout(window.kalshiTimer); window.kalshiTimer = null; }
+  closeKalshiWS();
+  closeGridWS();
   activeGameId = null;
   activeTeams = { home: '', away: '' };
   lastKalshiData = null;
+  // Clear edge ticker for sport switch
+  Object.keys(allEdgeData).forEach(k => delete allEdgeData[k]);
+
+  renderLiveValuePanel();
+  const lv = document.getElementById('live-value-panel');
+  if (lv) lv.classList.remove('visible');
   document.getElementById('detail').classList.remove('visible');
 
   loadGames();
@@ -832,7 +1021,8 @@ async function loadGames() {
       grid.appendChild(card);
     });
 
-    updateSidebarMeters();
+    // Subscribe all game markets to grid WebSocket (async, non-blocking)
+    subscribeAllGamesToGridWS();
 
     hideError();
   } catch (e) {
@@ -858,16 +1048,14 @@ async function selectGame(gameId, teams) {
   document.getElementById('k-away-team').textContent = teams.away;
   document.getElementById('detail').classList.add('visible');
 
-  // 2. Clear all existing timers to prevent "double-polling"
+  // 2. Clear all existing timers and close any existing Kalshi WebSocket
   if (pollTimer) clearTimeout(pollTimer);
-  if (window.kalshiTimer) clearTimeout(window.kalshiTimer);
+  if (window.kalshiTimer) { clearTimeout(window.kalshiTimer); window.kalshiTimer = null; }
+  closeKalshiWS();
+  kalshiWsGameId = null;
 
-  // 3. Independent Kalshi Loop (Always 2 seconds)
-  const runKalshiLoop = async () => {
-    if (activeGameId !== gameId) return; // Kill loop if game changed
-    await fetchKalshiOdds();
-    window.kalshiTimer = setTimeout(runKalshiLoop, 2000);
-  };
+  // 3. Kalshi: one REST call to discover market + then WebSocket takes over
+  fetchKalshiOdds();
 
   // 4. Independent ESPN Loop (Variable: 15s or 30m)
   const runESPNLoop = async () => {
@@ -888,8 +1076,7 @@ async function selectGame(gameId, teams) {
     pollTimer = setTimeout(runESPNLoop, nextInterval);
   };
 
-  // Initial immediate execution of both
-  runKalshiLoop();
+  // Initial immediate execution of ESPN loop
   runESPNLoop();
 }
 
@@ -984,7 +1171,180 @@ async function updateWinProb() {
 
 let lastKalshiData = null;
 
+// ── Kalshi WebSocket Streaming ────────────────────────────────────────────────
+let kalshiWS = null;
+let kalshiWsGameId = null;          // tracks which game the WS was opened for
+let kalshiMarketTickers = [];       // [homeTicker, awayTicker]
+let kalshiMarketState = {};         // ticker → { yes_bid, yes_ask }
+let kalshiWsReconnectTimer = null;
+let kalshiWsSeqId = 1;
 
+const KALSHI_WS_URL = 'wss://api.elections.kalshi.com/trade-api/ws/v2';
+
+function setKalshiWsStatus(msg, color) {
+  const el = document.getElementById('kalshi-ws-status');
+  if (el) {
+    el.textContent = msg;
+    el.style.color = color || 'var(--muted)';
+  }
+}
+
+function closeKalshiWS() {
+  if (kalshiWsReconnectTimer) { clearTimeout(kalshiWsReconnectTimer); kalshiWsReconnectTimer = null; }
+  if (kalshiWS) {
+    kalshiWS.onclose = null; // prevent reconnect on intentional close
+    kalshiWS.onerror = null;
+    kalshiWS.close();
+    kalshiWS = null;
+  }
+  kalshiMarketTickers = [];
+  kalshiMarketState = {};
+  kalshiWsSeqId = 1;
+}
+
+function openKalshiWS(tickers, finalTicker, series, game_level) {
+  closeKalshiWS();
+  kalshiMarketTickers = tickers;
+  const wsGameId = activeGameId; // capture for closure
+
+  const ws = new WebSocket(KALSHI_WS_URL);
+  kalshiWS = ws;
+
+  ws.onopen = () => {
+    if (activeGameId !== wsGameId) { ws.close(); return; }
+    setKalshiWsStatus('● WS connected — subscribing…', 'var(--accent)');
+
+    // Subscribe to orderbook_delta for each market ticker
+    const cmd = {
+      id: kalshiWsSeqId++,
+      cmd: 'subscribe',
+      params: {
+        channels: ['orderbook_delta'],
+        market_tickers: tickers
+      }
+    };
+    ws.send(JSON.stringify(cmd));
+  };
+
+  ws.onmessage = (evt) => {
+    if (activeGameId !== wsGameId) { ws.close(); return; }
+    try {
+      const msg = JSON.parse(evt.data);
+      handleKalshiWsMessage(msg, finalTicker, series, game_level);
+    } catch(e) { /* ignore parse errors */ }
+  };
+
+  ws.onerror = (err) => {
+    setKalshiWsStatus('WS error — falling back to REST', 'var(--away)');
+    console.warn('Kalshi WS error', err);
+  };
+
+  ws.onclose = (evt) => {
+    if (activeGameId !== wsGameId) return; // game changed, don't reconnect
+    setKalshiWsStatus(`WS closed (${evt.code}) — reconnecting…`, 'var(--muted)');
+    kalshiWsReconnectTimer = setTimeout(() => {
+      if (activeGameId === wsGameId) openKalshiWS(tickers, finalTicker, series, game_level);
+    }, 3000);
+  };
+}
+
+function handleKalshiWsMessage(msg, finalTicker, series, game_level) {
+  const type = msg.type;
+
+  // Subscription confirmation
+  if (type === 'subscribed') {
+    setKalshiWsStatus(`● LIVE  ${finalTicker}`, 'var(--accent)');
+    // Update Kalshi link
+    const linkEl = document.getElementById('kalshi-link');
+    linkEl.href = `https://kalshi.com/markets/${series}/${game_level}/${finalTicker}`;
+    linkEl.style.display = 'block';
+    return;
+  }
+
+  // Orderbook snapshot or delta
+  if (type === 'orderbook_snapshot' || type === 'orderbook_delta') {
+    const ticker = msg.market_ticker;
+    if (!ticker) return;
+
+    if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = { yes_bid: null, yes_ask: null };
+    const state = kalshiMarketState[ticker];
+
+    // Kalshi sends yes/no bids as arrays of [price, size] pairs sorted best-first
+    if (msg.yes !== undefined) {
+      // yes array: [[price,size],...] best bid is index 0
+      const yesBids = msg.yes;
+      state.yes_bid = (yesBids && yesBids.length > 0) ? yesBids[0][0] : state.yes_bid;
+    }
+    if (msg.no !== undefined) {
+      // no array best ask for yes = 100 - best no bid
+      const noBids = msg.no;
+      state.yes_ask = (noBids && noBids.length > 0) ? 100 - noBids[0][0] : state.yes_ask;
+    }
+
+    // For delta updates, process individual price level changes
+    if (type === 'orderbook_delta') {
+      if (msg.price !== undefined && msg.side !== undefined) {
+        // Delta: { side: 'yes'|'no', price, delta }
+        // We just re-request best prices from state after update
+        if (msg.side === 'yes' && msg.delta > 0) state.yes_bid = msg.price;
+        if (msg.side === 'no'  && msg.delta > 0) state.yes_ask = 100 - msg.price;
+      }
+    }
+
+    renderKalshiFromState();
+    return;
+  }
+
+  // ticker update (simpler price update message)
+  if (type === 'ticker') {
+    const ticker = msg.market_ticker;
+    if (!ticker) return;
+    if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = {};
+    if (msg.yes_bid != null) kalshiMarketState[ticker].yes_bid = msg.yes_bid;
+    if (msg.yes_ask != null) kalshiMarketState[ticker].yes_ask = msg.yes_ask;
+    renderKalshiFromState();
+  }
+}
+
+function renderKalshiFromState() {
+  const tickers = kalshiMarketTickers;
+  if (!tickers || tickers.length < 2) return;
+
+  const homeTicker = tickers[0];
+  const awayTicker = tickers[1];
+  const homeState  = kalshiMarketState[homeTicker] || {};
+  const awayState  = kalshiMarketState[awayTicker] || {};
+
+  const homeMid = (homeState.yes_bid != null && homeState.yes_ask != null)
+    ? Math.round((homeState.yes_bid + homeState.yes_ask) / 2)
+    : (homeState.yes_bid ?? homeState.yes_ask ?? null);
+
+  const awayMid = (awayState.yes_bid != null && awayState.yes_ask != null)
+    ? Math.round((awayState.yes_bid + awayState.yes_ask) / 2)
+    : (awayState.yes_bid ?? awayState.yes_ask ?? null);
+
+  if (homeMid == null || awayMid == null) return;
+
+  const updateSide = (side, price, labelSuffix) => {
+    const ml = centsToAmerican(price);
+    document.getElementById(`k-${side}-price`).textContent = `${price}¢`;
+    document.getElementById(`k-${side}-implied`).textContent = `Implied: ${price}% · ${labelSuffix}`;
+    document.getElementById(`k-${side}-ml`).textContent = `Moneyline: ${formatAmerican(ml)}`;
+  };
+
+  updateSide('home', homeMid, 'YES Price');
+  updateSide('away', awayMid, 'YES Price');
+
+  document.getElementById('kalshi-status').textContent =
+    `Updated ${new Date().toLocaleTimeString()}`;
+
+  lastKalshiData = { homeMid, awayMid };
+
+  const homeWPEl = document.getElementById('home-pct').textContent;
+  if (homeWPEl && homeWPEl !== '—') recalcEdge(parseInt(homeWPEl) / 100);
+}
+
+// Initial REST fetch to discover market tickers, then hand off to WebSocket
 async function fetchKalshiOdds() {
   const statusEl = document.getElementById('kalshi-status');
   try {
@@ -992,11 +1352,9 @@ async function fetchKalshiOdds() {
     const homeK = toKalshiAbbr(activeTeams.home);
     const dateStr = kalshiDateStr(new Date());
 
-    // Series ticker: NBA uses KXNBAGAME, CBB uses KXNCAAMBGAME
-    const series   = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
+    const series    = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
     const game_level = activeSport === 'nba' ? 'professional-basketball-game' : 'mens-college-basketball-mens-game';
     const eventTicker = `${series}-${dateStr}${awayK}${homeK}`;
-    statusEl.textContent = `Syncing Kalshi: ${awayK} @ ${homeK}...`;
 
     let eventData;
     try {
@@ -1008,7 +1366,6 @@ async function fetchKalshiOdds() {
         return t.includes(awayK) && t.includes(homeK);
       });
       if (!match) {
-        console.log(`debug: ${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`)
         statusEl.textContent = `No active market found for ${activeTeams.away} @ ${activeTeams.home}`;
         return;
       }
@@ -1018,51 +1375,45 @@ async function fetchKalshiOdds() {
     const markets = eventData.event?.markets || [];
     if (markets.length === 0) return;
 
-    let awayMid = null;
-    let homeMid = null;
+    // Seed initial prices from REST snapshot
+    let homeMid = Math.round(((markets[0].yes_bid ?? 0) + (markets[0].yes_ask ?? 100)) / 2);
+    let awayMid = Math.round(((markets[1].yes_bid ?? 0) + (markets[1].yes_ask ?? 100)) / 2);
 
-    // away index 1, home index 0
-    awayMid = Math.round(((markets[1].yes_bid ?? 0) + (markets[1].yes_ask ?? 100)) / 2);
-    homeMid = Math.round(((markets[0].yes_bid ?? 0) + (markets[0].yes_ask ?? 100)) / 2);
-
-
-    // Fallback logic: If prices aren't explicitly identified, 
-    // use the Kalshi KXNBAGAME standard: YES = Away team wins.
-    if (awayMid !== null && homeMid === null) {
-      homeMid = 100 - awayMid;
-    } else if (homeMid !== null && awayMid === null) {
-      awayMid = 100 - homeMid;
-    }
-
-    // Update UI elements
     const updateSide = (side, price, labelSuffix) => {
       const ml = centsToAmerican(price);
       document.getElementById(`k-${side}-price`).textContent = `${price}¢`;
       document.getElementById(`k-${side}-implied`).textContent = `Implied: ${price}% · ${labelSuffix}`;
       document.getElementById(`k-${side}-ml`).textContent = `Moneyline: ${formatAmerican(ml)}`;
     };
+    updateSide('home', homeMid, 'YES Price');
+    updateSide('away', awayMid, 'YES Price');
 
-    updateSide('away', awayMid, `YES Price`);
-    updateSide('home', homeMid, `Derived (100 - ${awayMid})`);
-
-    // Use the actual event ticker returned by the API
     const finalTicker = eventData.event?.ticker || eventTicker;
-    
-    // Update the link and the status text
-    statusEl.textContent = `Market: ${finalTicker} · Updated ${new Date().toLocaleTimeString()}`;
-    
+    statusEl.textContent = `Market: ${finalTicker} · Connecting WebSocket…`;
+
     const linkEl = document.getElementById('kalshi-link');
-    // Kalshi uses /markets/ for specific tickers or /events/ for the general event
     linkEl.href = `https://kalshi.com/markets/${series}/${game_level}/${finalTicker}`;
     linkEl.style.display = 'block';
 
-    // Refresh Edge Calculator
+    lastKalshiData = { homeMid, awayMid };
+
     const homeWPEl = document.getElementById('home-pct').textContent;
     if (homeWPEl && homeWPEl !== '—') recalcEdge(parseInt(homeWPEl) / 100);
 
-    lastKalshiData = { awayMid: awayMid, homeMid: homeMid };
+    // Seed state for WS renderer
+    const homeTicker = markets[0].ticker;
+    const awayTicker = markets[1].ticker;
+    kalshiMarketState[homeTicker] = { yes_bid: markets[0].yes_bid, yes_ask: markets[0].yes_ask };
+    kalshiMarketState[awayTicker] = { yes_bid: markets[1].yes_bid, yes_ask: markets[1].yes_ask };
+
+    // Open WebSocket for real-time streaming (only if a new game was selected)
+    if (kalshiWsGameId !== activeGameId) {
+      kalshiWsGameId = activeGameId;
+      openKalshiWS([homeTicker, awayTicker], finalTicker, series, game_level);
+    }
   } catch (e) {
-    statusEl.textContent = `Update Error: ${e.message}`;
+    statusEl.textContent = `Kalshi Error: ${e.message}`;
+    setKalshiWsStatus('WS unavailable', 'var(--away)');
   }
 }
 
@@ -1082,21 +1433,28 @@ function recalcEdge(espnHomeWP, isStarted) {
   const awayEdge = espnAwayPct - awayMid;  
 
   const THRESHOLD = 7;
+  const ODDSTHRESHOLD = 25;
   edgeSection.style.display = 'block'; // Ensure section is visible
 
   let bestEdge = 0;
   let targetTeam = "";
+  let targetTeamOdds = 0.0;
   
   // Identify the best positive edge (where ESPN % > Kalshi Price)
   if (homeEdge >= awayEdge) {
     bestEdge = homeEdge;
     targetTeam = activeTeams.home;
+    targetTeamOdds = espnHomePct;
   } else {
     bestEdge = awayEdge;
     targetTeam = activeTeams.away;
+    targetTeamOdds = espnAwayPct;
   }
 
   const hasBet = bestEdge >= THRESHOLD;
+  const ignore = targetTeamOdds < ODDSTHRESHOLD;
+
+
   edgeValue.textContent = `${bestEdge > 0 ? '+' : ''}${bestEdge} pts`;
   edgeValue.className = `edge-value ${hasBet ? 'positive' : 'neutral'}`;
 
@@ -1119,22 +1477,40 @@ function recalcEdge(espnHomeWP, isStarted) {
     </div>
   `;
 
-  if (hasBet) {
+  if (ignore) {
     html += `
-      <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
-        <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
-          ● ${labelText}
+        <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
+          <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
+            ● ${labelText}
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
+            IGNORE EDGE, TARGET TEAM WIN PROBABILITY <${ODDSTHRESHOLD}%
+          </div>
+          <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
+            Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
+          </div>
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
-          BUY ${targetTeam} YES
+      `;
+  } 
+  else {
+
+    if (hasBet) {
+      html += `
+        <div style="border:1px solid ${labelColor}; padding:0.75rem; background: rgba(0,0,0,0.2)">
+          <div style="font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:${labelColor}; margin-bottom:0.3rem; font-weight:600;">
+            ● ${labelText}
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:#fff">
+            BUY ${targetTeam} YES
+          </div>
+          <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
+            Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
+          </div>
         </div>
-        <div style="font-size:0.7rem; margin-top:0.2rem; color:var(--text)">
-          Projection: ${targetTeam === activeTeams.home ? espnHomePct : espnAwayPct}% vs Market: ${targetTeam === activeTeams.home ? homeMid : awayMid}¢
-        </div>
-      </div>
-    `;
-  } else {
-    html += `<div style="border:1px solid var(--border); padding:0.75rem; color:var(--muted); font-size:0.7rem;">○ Market aligned with model — no significant edge</div>`;
+      `;
+    } else {
+      html += `<div style="border:1px solid var(--border); padding:0.75rem; color:var(--muted); font-size:0.7rem;">○ Market aligned with model — no significant edge</div>`;
+    }
   }
 
   edgeBetOn.innerHTML = html;
@@ -1246,77 +1622,326 @@ function drawChart(history, started) {
   });
 }
 
-async function checkAllGamesForEdge() {
+// ── Grid-Level Kalshi WebSocket ───────────────────────────────────────────────
+// One shared WS for all game cards on the current page.
+// Stores edge data per gameId: { home, away, homeEdge, awayEdge, bestTeam, bestEdge, isLive,
+//                                 homeMid, awayMid, homeWP, homeTicker, awayTicker, gameId }
+const allEdgeData = {};
+
+// Maps market_ticker → gameId so WS messages can be routed
+const tickerToGameId = {};
+
+// Maps gameId → { homeTicker, awayTicker, espnHomeWP, homeAbbr, awayAbbr, isLive }
+const gameMarketMeta = {};
+
+let gridWS = null;
+let gridWSReconnectTimer = null;
+let gridWSSubscribedTickers = new Set();
+let gridWSSeqId = 100; // use range 100+ to avoid collision with detail WS
+
+function setLvpWsStatus(msg, color) {
+  const dot   = document.getElementById('lv-ws-dot');
+  const label = document.getElementById('lv-ws-label');
+  if (label) { label.textContent = msg; label.style.color = color || ''; }
+  if (dot) {
+    dot.className = 'lv-ws-dot';
+    if (color === 'var(--accent)') dot.classList.add('connected');
+    else if (color === 'var(--away)') dot.classList.add('error');
+  }
+}
+
+function closeGridWS() {
+  if (gridWSReconnectTimer) { clearTimeout(gridWSReconnectTimer); gridWSReconnectTimer = null; }
+  if (gridWS) {
+    gridWS.onclose = null;
+    gridWS.onerror = null;
+    gridWS.close();
+    gridWS = null;
+  }
+  gridWSSubscribedTickers.clear();
+}
+
+function openGridWS(tickers) {
+  if (!tickers || tickers.length === 0) return;
+  closeGridWS();
+  gridWSSubscribedTickers = new Set(tickers);
+
+  const ws = new WebSocket('wss://api.elections.kalshi.com/trade-api/ws/v2');
+  gridWS = ws;
+
+  ws.onopen = () => {
+    setLvpWsStatus('● Connected — streaming prices', 'var(--accent)');
+    ws.send(JSON.stringify({
+      id: gridWSSeqId++,
+      cmd: 'subscribe',
+      params: { channels: ['orderbook_delta'], market_tickers: tickers }
+    }));
+  };
+
+  ws.onmessage = (evt) => {
+    try {
+      handleGridWsMessage(JSON.parse(evt.data));
+    } catch(e) {}
+  };
+
+  ws.onerror = () => setLvpWsStatus('WS error', 'var(--away)');
+
+  ws.onclose = (evt) => {
+    setLvpWsStatus(`Reconnecting… (${evt.code})`, 'var(--muted)');
+    gridWSReconnectTimer = setTimeout(() => openGridWS([...gridWSSubscribedTickers]), 4000);
+  };
+}
+
+function handleGridWsMessage(msg) {
+  const type = msg.type;
+  const ticker = msg.market_ticker;
+
+  if (type === 'subscribed') {
+    setLvpWsStatus('● Live prices streaming', 'var(--accent)');
+    return;
+  }
+
+  if (!ticker) return;
+  const gameId = tickerToGameId[ticker];
+  if (!gameId) return;
+  const meta = gameMarketMeta[gameId];
+  if (!meta) return;
+
+  // Update the shared kalshiMarketState (same store used by detail panel)
+  if (!kalshiMarketState[ticker]) kalshiMarketState[ticker] = { yes_bid: null, yes_ask: null };
+  const state = kalshiMarketState[ticker];
+
+  if (type === 'orderbook_snapshot' || type === 'orderbook_delta') {
+    if (msg.yes !== undefined && msg.yes.length > 0) state.yes_bid = msg.yes[0][0];
+    if (msg.no  !== undefined && msg.no.length  > 0) state.yes_ask = 100 - msg.no[0][0];
+    if (type === 'orderbook_delta' && msg.price !== undefined) {
+      if (msg.side === 'yes' && msg.delta > 0) state.yes_bid = msg.price;
+      if (msg.side === 'no'  && msg.delta > 0) state.yes_ask = 100 - msg.price;
+    }
+  } else if (type === 'ticker') {
+    if (msg.yes_bid != null) state.yes_bid = msg.yes_bid;
+    if (msg.yes_ask != null) state.yes_ask = msg.yes_ask;
+  }
+
+  // Recalculate edge for this game
+  recomputeGameEdge(gameId);
+
+  // If this game is the active detail game, also update the detail panel
+  if (activeGameId === gameId) {
+    renderKalshiFromState();
+  }
+}
+
+function recomputeGameEdge(gameId) {
+  const meta = gameMarketMeta[gameId];
+  if (!meta) return;
+
+  const homeS = kalshiMarketState[meta.homeTicker] || {};
+  const awayS = kalshiMarketState[meta.awayTicker] || {};
+
+  const homeMid = (homeS.yes_bid != null && homeS.yes_ask != null)
+    ? Math.round((homeS.yes_bid + homeS.yes_ask) / 2)
+    : (homeS.yes_bid ?? homeS.yes_ask ?? null);
+  const awayMid = (awayS.yes_bid != null && awayS.yes_ask != null)
+    ? Math.round((awayS.yes_bid + awayS.yes_ask) / 2)
+    : (awayS.yes_bid ?? awayS.yes_ask ?? null);
+
+  if (homeMid == null || awayMid == null) return;
+
+  const espnH = Math.round(meta.espnHomeWP * 100);
+  const espnA = 100 - espnH;
+  const homeEdge = espnH - homeMid;
+  const awayEdge = espnA - awayMid;
+  const bestEdge = homeEdge >= awayEdge ? homeEdge : awayEdge;
+  const bestTeam = homeEdge >= awayEdge ? meta.homeAbbr : meta.awayAbbr;
+
+  allEdgeData[gameId] = {
+    gameId,
+    home: meta.homeAbbr, away: meta.awayAbbr,
+    homeEdge, awayEdge, bestEdge, bestTeam,
+    homeMid, awayMid, espnH, espnA,
+    isLive: meta.isLive
+  };
+
+  const THRESHOLD = 7;
+  const gap = Math.max(Math.abs(homeEdge), Math.abs(awayEdge));
+  const card = document.querySelector(`.game-card[data-id="${gameId}"]`);
+  if (card) card.classList.toggle('value-bet', gap >= THRESHOLD);
+
+
+  renderLiveValuePanel();
+}
+
+// ── After games load, discover all Kalshi markets and subscribe via one WS ────
+async function subscribeAllGamesToGridWS() {
   const cards = document.querySelectorAll('.game-card');
+  const series = activeSport === 'nba' ? 'KXNBAGAME' : 'KXNCAAMBGAME';
+  const allTickers = [];
+
+  // Reset state
+  Object.keys(tickerToGameId).forEach(k => delete tickerToGameId[k]);
+  Object.keys(gameMarketMeta).forEach(k => delete gameMarketMeta[k]);
+  Object.keys(allEdgeData).forEach(k => delete allEdgeData[k]);
+
+  setLvpWsStatus('Fetching markets…', '');
+
   for (const card of cards) {
     const gameId = card.dataset.id;
     if (!gameId) continue;
     try {
-      // Get ESPN win prob
+      // Get ESPN probabilities
       const espnData = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
       const wpData = espnData.winprobability || [];
-      if (!wpData.length) continue;
-      const homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
-
-      // Get team abbrs from card
+      const predictorData = espnData.predictor;
       const comp = espnData.header?.competitions?.[0];
       if (!comp) continue;
-      const home = comp.competitors.find(c => c.homeAway === 'home');
-      const away = comp.competitors.find(c => c.homeAway === 'away');
-      if (!home || !away) continue;
 
-      const awayK = toKalshiAbbr(away.team.abbreviation);
-      const homeK = toKalshiAbbr(home.team.abbreviation);
-      const dateStr = kalshiDateStr(new Date());
-      const series2 = activeSport === 'nba' ? 'KXNBAGAME' : 'KXCBBGAME';
-      const eventTicker = `${series2}-${dateStr}${awayK}${homeK}`;
+      const homeComp = comp.competitors.find(c => c.homeAway === 'home');
+      const awayComp = comp.competitors.find(c => c.homeAway === 'away');
+      if (!homeComp || !awayComp) continue;
 
-      const eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
-      const markets = eventData.event?.markets || [];
-      const m = markets.find(m => m.title?.toUpperCase().includes(awayK)) || markets[0];
-      if (!m) continue;
-
-      const awayMid = Math.round(((m.yes_bid ?? 0) + (m.yes_ask ?? 100)) / 2);
-      const homeMid = 100 - awayMid;
-
-      const espnH = Math.round(homeWP * 100);
-      const espnA = 100 - espnH;
-      const homeGap = Math.abs(espnH - homeMid);
-      const awayGap = Math.abs(espnA - awayMid);
-      const bestGap = Math.max(homeGap, awayGap);
-
-      if (bestGap >= THRESHOLD) {
-        card.classList.add('value-bet');
-      } else {
-        card.classList.remove('value-bet');
-      }
-    } catch(e) {
-      // silently skip — market may not exist yet
-    }
-  }
-}
-
-async function updateSidebarMeters() {
-  const cards = document.querySelectorAll('.game-card');
-  for (const card of cards) {
-    const gameId = card.dataset.id;
-    try {
-      // Fetch summary for each game to get the most recent probability
-      const data = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
-      const wpData = data.winprobability || [];
-      const predictorData = data.predictor;
-      
-      let homeWP = 0.5;
+      let homeWP = 0.5, isLive = false;
       if (wpData.length > 0) {
         homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
+        isLive = true;
       } else if (predictorData?.homeTeam) {
         homeWP = predictorData.homeTeam.gameProjection / 100;
       }
-      
+
+      const homeAbbr = homeComp.team.abbreviation;
+      const awayAbbr = awayComp.team.abbreviation;
+      const awayK = toKalshiAbbr(awayAbbr);
+      const homeK = toKalshiAbbr(homeAbbr);
+      const dateStr = kalshiDateStr(new Date());
+      const eventTicker = `${series}-${dateStr}${awayK}${homeK}`;
+
+      let markets;
+      try {
+        const eventData = await fetchJSON(`${KALSHI_BASE}/events/${eventTicker}?with_nested_markets=true`);
+        markets = eventData.event?.markets || [];
+      } catch(e) {
+        // Try search fallback
+        try {
+          const searchData = await fetchJSON(`${KALSHI_BASE}/markets?limit=100&series_ticker=${series}&status=open`);
+          const match = (searchData.markets || []).find(m => {
+            const t = m.ticker.toUpperCase();
+            return t.includes(awayK) && t.includes(homeK);
+          });
+          if (!match) continue;
+          const eventData2 = await fetchJSON(`${KALSHI_BASE}/events/${match.event_ticker}?with_nested_markets=true`);
+          markets = eventData2.event?.markets || [];
+        } catch(e2) { continue; }
+      }
+
+      if (!markets || markets.length < 2) continue;
+
+      const homeTicker = markets[0].ticker;
+      const awayTicker = markets[1].ticker;
+
+      // Seed initial state from REST snapshot
+      kalshiMarketState[homeTicker] = { yes_bid: markets[0].yes_bid ?? null, yes_ask: markets[0].yes_ask ?? null };
+      kalshiMarketState[awayTicker] = { yes_bid: markets[1].yes_bid ?? null, yes_ask: markets[1].yes_ask ?? null };
+
+      tickerToGameId[homeTicker] = gameId;
+      tickerToGameId[awayTicker] = gameId;
+      gameMarketMeta[gameId] = { homeTicker, awayTicker, espnHomeWP: homeWP, homeAbbr, awayAbbr, isLive };
+
+      allTickers.push(homeTicker, awayTicker);
+
+      // Update sidebar meter
       card.style.setProperty('--home-wp', `${homeWP * 100}%`);
-    } catch (e) {
-      console.warn(`Could not update meter for game ${gameId}`);
-    }
+
+      // Compute initial edge from REST data
+      recomputeGameEdge(gameId);
+
+    } catch(e) { /* skip game */ }
+  }
+
+  if (allTickers.length > 0) {
+    openGridWS(allTickers);
+  } else {
+    setLvpWsStatus('No Kalshi markets found', 'var(--muted)');
+  }
+}
+
+// ── ESPN win prob refresh (keeps WS edge data current) ────────────────────────
+async function refreshAllESPNProbs() {
+  const cards = document.querySelectorAll('.game-card');
+  for (const card of cards) {
+    const gameId = card.dataset.id;
+    if (!gameId || !gameMarketMeta[gameId]) continue;
+    try {
+      const data = await fetchJSON(`${ESPN_BASE}/summary?event=${gameId}`);
+      const wpData = data.winprobability || [];
+      const predictorData = data.predictor;
+      const status = data.header?.competitions[0]?.status?.type?.name;
+      const isLive = ["STATUS_IN_PROGRESS","STATUS_HALFTIME","STATUS_END_PERIOD"].includes(status);
+
+      let homeWP = gameMarketMeta[gameId].espnHomeWP; // keep existing if no update
+      if (wpData.length > 0) homeWP = wpData[wpData.length - 1].homeWinPercentage ?? homeWP;
+      else if (predictorData?.homeTeam) homeWP = predictorData.homeTeam.gameProjection / 100;
+
+      gameMarketMeta[gameId].espnHomeWP = homeWP;
+      gameMarketMeta[gameId].isLive = isLive;
+      card.style.setProperty('--home-wp', `${homeWP * 100}%`);
+
+      recomputeGameEdge(gameId);
+
+      // Feed backtest engine
+      btProcessGame(gameId, data);
+    } catch(e) {}
+  }
+}
+
+function renderLiveValuePanel() {
+  const THRESHOLD = 7;
+  const IGNORE_BELOW = 25;
+  const panel = document.getElementById('live-value-panel');
+  const grid  = document.getElementById('live-value-bets-grid');
+
+  const bets = Object.values(allEdgeData).filter(d => Math.abs(d.bestEdge) >= THRESHOLD);
+
+  if (bets.length === 0) {
+    panel.classList.remove('visible');
+    return;
+  }
+
+  panel.classList.add('visible');
+
+  // Sort: live first, then by edge size
+  bets.sort((a, b) => {
+    if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
+    return Math.abs(b.bestEdge) - Math.abs(a.bestEdge);
+  });
+
+  grid.innerHTML = bets.map(d => {
+    const isBuy  = d.bestEdge > 0;
+    const sign   = isBuy ? '+' : '';
+    const ignore = (d.bestTeam === d.home ? d.espnH : d.espnA) < IGNORE_BELOW;
+    const action = ignore
+      ? `IGNORE — ${d.bestTeam} win prob < ${IGNORE_BELOW}%`
+      : (isBuy ? `BUY ${d.bestTeam} YES` : `SELL ${d.bestTeam} YES`);
+    const actionColor = ignore ? 'var(--away)' : 'var(--accent)';
+    const liveTag = d.isLive ? '<span class="lvp-live-tag">Live</span>' : '';
+
+    return `
+      <div class="lvp-card" data-gameid="${d.gameId}" onclick="lvpSelectGame('${d.gameId}')">
+        <div class="lvp-matchup">${d.home} <span style="color:var(--muted);font-size:0.8rem">vs</span> ${d.away}${liveTag}</div>
+        <div class="lvp-action" style="color:${actionColor}">${action}</div>
+        <div class="lvp-detail">
+          <span class="lvp-edge-badge">${sign}${d.bestEdge}pts</span>
+          Model: ${d.bestTeam === d.home ? d.espnH : d.espnA}% · Market: ${d.bestTeam === d.home ? d.homeMid : d.awayMid}¢
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── Helper to select game from Live Value Panel ───────────────────────────────
+function lvpSelectGame(gameId) {
+  const card = document.querySelector(`.game-card[data-id="${gameId}"]`);
+  if (card) {
+    card.click();
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
@@ -1324,27 +1949,447 @@ async function updateSidebarMeters() {
 let currentPSTDate = getPSTDateParam();
 
 function scheduleMidnightReload() {
-  // Calculate ms until next midnight PST
   const now = new Date();
   const pstNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
   const pstMidnight = new Date(pstNow);
-  pstMidnight.setHours(24, 0, 0, 0); // next midnight PST
+  pstMidnight.setHours(24, 0, 0, 0);
   const msUntilMidnight = pstMidnight - pstNow;
 
   setTimeout(() => {
     currentPSTDate = getPSTDateParam();
-    loadGames();           // reload fresh day's slate
-    checkAllGamesForEdge();
-    scheduleMidnightReload(); // reschedule for next midnight
+    loadGames();
+    scheduleMidnightReload();
   }, msUntilMidnight);
 }
 
-setInterval(checkAllGamesForEdge, 10000);
-checkAllGamesForEdge();
+// Refresh ESPN probabilities every 30s to keep edges accurate
+// (Kalshi prices update instantly via WebSocket)
+setInterval(refreshAllESPNProbs, 30000);
 
 loadGames();
 setInterval(loadGames, 60000);
 scheduleMidnightReload();
+
+// ── View switcher (games vs backtest) ─────────────────────────────────────────
+let activeView = 'games';
+
+function setView(view) {
+  activeView = view;
+  const isBacktest = view === 'backtest';
+  document.getElementById('tab-backtest').classList.toggle('active-sport', isBacktest);
+  document.getElementById('sport-nba').classList.toggle('active-sport', !isBacktest && activeSport === 'nba');
+  document.getElementById('sport-cbb').classList.toggle('active-sport', !isBacktest && activeSport === 'cbb');
+  document.getElementById('games-view').style.display  = isBacktest ? 'none' : '';
+  document.getElementById('backtest-view').style.display = isBacktest ? 'block' : 'none';
+  if (isBacktest) renderBacktestView();
+}
+
+// ── Backtest / Kelly Paper-Trading Engine ─────────────────────────────────────
+// ── Backtest config ───────────────────────────────────────────────────────────
+// All sizing in units (% of bankroll). Starting bankroll = 100u per tier.
+const BT_TIERS = [
+  { id: 'even',    label: 'Even or Better',  maxAsk: 50, startUnits: 100 },
+  { id: 'plus250', label: '+250 or Better',  maxAsk: 29, startUnits: 100 },
+  { id: 'plus500', label: '+500 or Better',  maxAsk: 17, startUnits: 100 },
+];
+const BT_KEY = 'backtest_v2'; // bump key so old $ data doesn't pollute
+
+function btLoad() {
+  try { const r = localStorage.getItem(BT_KEY); return r ? JSON.parse(r) : btInitialState(); }
+  catch(e) { return btInitialState(); }
+}
+function btInitialState() {
+  const s = { bets: [], quarterTracking: {} };
+  BT_TIERS.forEach(t => { s[t.id] = { units: t.startUnits, history: [t.startUnits] }; });
+  return s;
+}
+function btSave(s) { try { localStorage.setItem(BT_KEY, JSON.stringify(s)); } catch(e) {} }
+
+let btState = btLoad();
+
+// ── Random lock-in timer per quarter ─────────────────────────────────────────
+// quarterLockTimers[gameId_Qn] = setTimeout id — fires at a random moment
+// within the quarter window (~12 min NBA quarter = 720s real time, but we
+// spread randomly across the ESPN polling window instead, since we can't
+// know real wall-clock quarter boundaries exactly).
+// Strategy: when a new quarter starts, schedule a random timer between
+// 30s and 600s. Whenever it fires, snapshot the current edge and lock it.
+const quarterLockTimers = {};
+
+function btScheduleRandomLock(gameId, quarter) {
+  const key = `${gameId}_Q${quarter}`;
+  if (quarterLockTimers[key]) return; // already scheduled
+  // Random delay: 30–600 seconds (uniform)
+  const delayMs = (30 + Math.random() * 570) * 1000;
+  quarterLockTimers[key] = setTimeout(() => {
+    btFireRandomLock(gameId, quarter);
+  }, delayMs);
+}
+
+function btFireRandomLock(gameId, quarter) {
+  const key = `${gameId}_Q${quarter}`;
+  delete quarterLockTimers[key];
+  const tracking = btState.quarterTracking[key];
+  if (!tracking || tracking.lockedIn) return;
+  // Snapshot whatever the current edge reading is right now
+  btLockQuarter(gameId, quarter);
+  if (activeView === 'backtest') renderBacktestView();
+}
+
+function btCancelTimers(gameId) {
+  [1,2,3,4].forEach(q => {
+    const key = `${gameId}_Q${q}`;
+    if (quarterLockTimers[key]) { clearTimeout(quarterLockTimers[key]); delete quarterLockTimers[key]; }
+  });
+}
+
+// ── Edge snapshot (called continuously; stores latest reading, not best) ──────
+function btSnapshotEdge(gameId, quarter, homeAbbr, awayAbbr, espnHomeWP, homeMid, awayMid, homeAsk, awayAsk, sport) {
+  if (!quarter || quarter < 1 || quarter > 4) return;
+  const espnH = Math.round(espnHomeWP * 100);
+  const espnA = 100 - espnH;
+  const homeEdge = espnH - homeMid;
+  const awayEdge = espnA - awayMid;
+
+  // Pick the best side at this moment (may be no edge — that's fine, still snapshot)
+  let edge, team, espnWP, kalshiAsk;
+  if (homeEdge >= awayEdge && homeEdge >= 7) {
+    edge = homeEdge; team = homeAbbr; espnWP = espnH / 100; kalshiAsk = homeAsk;
+  } else if (awayEdge > homeEdge && awayEdge >= 7) {
+    edge = awayEdge; team = awayAbbr; espnWP = espnA / 100; kalshiAsk = awayAsk;
+  } else {
+    // No edge at this moment — clear snapshot so random lock won't fire a no-edge bet
+    const key = `${gameId}_Q${quarter}`;
+    if (btState.quarterTracking[key] && !btState.quarterTracking[key].lockedIn) {
+      btState.quarterTracking[key].hasEdge = false;
+    }
+    return;
+  }
+
+  const key = `${gameId}_Q${quarter}`;
+  const existing = btState.quarterTracking[key];
+  // Always overwrite with latest reading (not best — truly random moment)
+  if (!existing || !existing.lockedIn) {
+    btState.quarterTracking[key] = {
+      gameId, quarter, bestEdge: edge, team, espnWP, kalshiAsk,
+      homeAbbr, awayAbbr, sport, lockedIn: false, hasEdge: true,
+      timestamp: Date.now()
+    };
+  } else if (!existing.lockedIn) {
+    // Update in place with latest values
+    existing.bestEdge = edge; existing.team = team;
+    existing.espnWP = espnWP; existing.kalshiAsk = kalshiAsk;
+    existing.hasEdge = true; existing.timestamp = Date.now();
+  }
+}
+
+function btLockQuarter(gameId, quarter) {
+  const key = `${gameId}_Q${quarter}`;
+  const t = btState.quarterTracking[key];
+  if (!t || t.lockedIn || !t.hasEdge) return; // nothing to lock or no edge at fire time
+  t.lockedIn = true;
+
+  BT_TIERS.forEach(tier => {
+    if (t.kalshiAsk > tier.maxAsk) return;
+    const units = btState[tier.id].units;
+    // Kelly in unit terms: fraction × current units = units to stake
+    const b = (100 - t.kalshiAsk) / t.kalshiAsk; // net profit per unit risked
+    const p = t.espnWP, q = 1 - p;
+    const halfKelly = Math.max(0, (p * b - q) / b) / 2;
+    const stakeUnits = parseFloat((units * halfKelly).toFixed(4));
+    if (stakeUnits < 0.001) return;
+
+    btState.bets.push({
+      id: `${key}_${tier.id}_${Date.now()}`,
+      gameId, quarter, tier: tier.id,
+      team: t.team, homeAbbr: t.homeAbbr, awayAbbr: t.awayAbbr,
+      espnWP: t.espnWP, kalshiAsk: t.kalshiAsk, bestEdge: t.bestEdge,
+      stakeUnits, unitsAtBet: units, kellyFraction: halfKelly, sport: t.sport,
+      timestamp: Date.now(), outcome: 'pending', pnlUnits: null
+    });
+    btState[tier.id].units = parseFloat((units - stakeUnits).toFixed(4));
+    btSave(btState);
+  });
+}
+
+function btResolveGame(gameId, winnerAbbr) {
+  let changed = false;
+  btState.bets.forEach(bet => {
+    if (bet.gameId !== gameId || bet.outcome !== 'pending') return;
+    const won = bet.team === winnerAbbr;
+    // Payout in units: stake × (100 / ask) if win, 0 if loss
+    const payoutUnits = won ? parseFloat((bet.stakeUnits * (100 / bet.kalshiAsk)).toFixed(4)) : 0;
+    bet.outcome = won ? 'win' : 'loss';
+    bet.pnlUnits = parseFloat((payoutUnits - bet.stakeUnits).toFixed(4));
+    btState[bet.tier].units = parseFloat((btState[bet.tier].units + bet.stakeUnits + bet.pnlUnits).toFixed(4));
+    btState[bet.tier].history.push(parseFloat(btState[bet.tier].units.toFixed(2)));
+    changed = true;
+  });
+  if (changed) { btSave(btState); if (activeView === 'backtest') renderBacktestView(); }
+}
+
+const lastKnownQuarter = {};
+
+function btCheckQuarterTransition(gameId, currentQuarter) {
+  const prev = lastKnownQuarter[gameId];
+  // New quarter detected — schedule random lock for the new quarter
+  if (prev !== currentQuarter) {
+    if (prev >= 1 && prev <= 4) {
+      // Force-lock previous quarter if random timer hasn't fired yet
+      const prevKey = `${gameId}_Q${prev}`;
+      if (quarterLockTimers[prevKey]) {
+        clearTimeout(quarterLockTimers[prevKey]);
+        delete quarterLockTimers[prevKey];
+        btLockQuarter(gameId, prev);
+      }
+    }
+    if (currentQuarter >= 1 && currentQuarter <= 4) {
+      btScheduleRandomLock(gameId, currentQuarter);
+    }
+  }
+  lastKnownQuarter[gameId] = currentQuarter;
+}
+
+async function btProcessGame(gameId, espnData) {
+  const comp = espnData.header?.competitions?.[0];
+  if (!comp) return;
+  const statusName = comp.status?.type?.name || '';
+  const isLive  = ['STATUS_IN_PROGRESS','STATUS_HALFTIME','STATUS_END_PERIOD'].includes(statusName);
+  const isFinal = statusName === 'STATUS_FINAL';
+
+  if (isFinal) {
+    btCancelTimers(gameId);
+    const homeC = comp.competitors.find(c => c.homeAway === 'home');
+    const awayC = comp.competitors.find(c => c.homeAway === 'away');
+    if (homeC && awayC) {
+      const winner = parseInt(homeC.score) > parseInt(awayC.score) ? homeC.team.abbreviation : awayC.team.abbreviation;
+      [1,2,3,4].forEach(q => btLockQuarter(gameId, q));
+      btResolveGame(gameId, winner);
+    }
+    return;
+  }
+  if (!isLive) return;
+
+  const period = comp.status?.period || 0;
+  const quarter = (period >= 1 && period <= 4) ? period : null;
+  if (quarter) btCheckQuarterTransition(gameId, quarter);
+
+  const meta = gameMarketMeta[gameId];
+  if (!meta || !quarter) return;
+  const homeS = kalshiMarketState[meta.homeTicker] || {};
+  const awayS = kalshiMarketState[meta.awayTicker] || {};
+  if (homeS.yes_ask == null || awayS.yes_ask == null) return;
+  const wpData = espnData.winprobability || [];
+  if (!wpData.length) return;
+  const homeWP = wpData[wpData.length - 1].homeWinPercentage ?? 0.5;
+  const homeMid = homeS.yes_bid != null ? Math.round((homeS.yes_bid + homeS.yes_ask) / 2) : homeS.yes_ask;
+  const awayMid = awayS.yes_bid != null ? Math.round((awayS.yes_bid + awayS.yes_ask) / 2) : awayS.yes_ask;
+  // Snapshot latest edge reading (random timer will lock it at a random moment)
+  btSnapshotEdge(gameId, quarter, meta.homeAbbr, meta.awayAbbr, homeWP, homeMid, awayMid, homeS.yes_ask, awayS.yes_ask, activeSport);
+}
+
+function renderBacktestView() {
+  const el = document.getElementById('backtest-view');
+  if (!el) return;
+  const bets = btState.bets;
+  const resolved = bets.filter(b => b.outcome !== 'pending');
+  const pending  = bets.filter(b => b.outcome === 'pending');
+
+  function stats(subset) {
+    const res = subset.filter(b => b.outcome !== 'pending');
+    const wins = res.filter(b => b.outcome === 'win').length;
+    return {
+      wins, total: res.length,
+      pnlUnits: res.reduce((s,b) => s + (b.pnlUnits ?? 0), 0),
+      avgEdge:  res.length ? res.reduce((s,b) => s + b.bestEdge, 0) / res.length : 0,
+      avgKelly: res.length ? res.reduce((s,b) => s + b.kellyFraction*100, 0) / res.length : 0,
+    };
+  }
+
+  // fmt helpers
+  const fmtU = u => (u >= 0 ? '+' : '') + u.toFixed(2) + 'u';
+  const fmtROI = (units, start) => {
+    const roi = ((units - start) / start * 100).toFixed(1);
+    return (Number(roi) >= 0 ? '+' : '') + roi + '%';
+  };
+
+  const tierHTML = BT_TIERS.map(tier => {
+    const tb = resolved.filter(b => b.tier === tier.id);
+    const s  = stats(tb);
+    const units = btState[tier.id].units;
+    const roiColor = units >= tier.startUnits ? 'var(--accent)' : 'var(--away)';
+
+    const quarters = [1,2,3,4].map(q => {
+      const qb = tb.filter(b => b.quarter === q);
+      const qw = qb.filter(b => b.outcome === 'win').length;
+      const qPnl = qb.reduce((s,b) => s + (b.pnlUnits ?? 0), 0);
+      return `<td style="text-align:center;padding:5px 10px;border-right:1px solid var(--border);">
+        ${qb.length
+          ? `<span style="font-family:'Bebas Neue';font-size:1rem;">${qw}/${qb.length}</span>
+             <br><span style="font-size:0.52rem;color:var(--muted)">${(qw/qb.length*100).toFixed(0)}%</span>
+             <br><span style="font-size:0.52rem;color:${qPnl>=0?'var(--accent)':'var(--away)'}">${fmtU(qPnl)}</span>`
+          : '<span style="color:var(--muted)">—</span>'}
+      </td>`;
+    }).join('');
+
+    return `
+    <div style="border:1px solid var(--border);padding:1.2rem;background:var(--chart-bg);">
+      <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:0.7rem;">${tier.label}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:1rem;">
+        <div>
+          <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Bankroll</div>
+          <div style="font-family:'Bebas Neue';font-size:1.8rem;color:${roiColor};line-height:1.1">${units.toFixed(1)}u</div>
+          <div style="font-size:0.58rem;color:${roiColor}">${fmtROI(units, tier.startUnits)} ROI</div>
+        </div>
+        <div>
+          <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Win Rate</div>
+          <div style="font-family:'Bebas Neue';font-size:1.8rem;line-height:1.1">${s.total ? (s.wins/s.total*100).toFixed(0)+'%' : '—'}</div>
+          <div style="font-size:0.58rem;color:var(--muted)">${s.wins}W / ${s.total - s.wins}L</div>
+        </div>
+        <div>
+          <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">P&L</div>
+          <div style="font-family:'Bebas Neue';font-size:1.8rem;color:${s.pnlUnits>=0?'var(--accent)':'var(--away)'};line-height:1.1">${fmtU(s.pnlUnits)}</div>
+          <div style="font-size:0.58rem;color:var(--muted)">net units</div>
+        </div>
+        <div>
+          <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Avg Edge</div>
+          <div style="font-family:'Bebas Neue';font-size:1.8rem;color:var(--kalshi);line-height:1.1">+${s.avgEdge.toFixed(1)}</div>
+          <div style="font-size:0.58rem;color:var(--muted)">pts · ${s.avgKelly.toFixed(1)}% ½K</div>
+        </div>
+      </div>
+      <div style="font-size:0.5rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.4rem;border-top:1px solid var(--border);padding-top:0.6rem;">By quarter — W/L · win% · P&L</div>
+      <table style="width:100%;border-collapse:collapse;border:1px solid var(--border);">
+        <tr style="font-size:0.5rem;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);">
+          <td style="padding:3px 10px;border-right:1px solid var(--border)">Q1</td>
+          <td style="padding:3px 10px;border-right:1px solid var(--border)">Q2</td>
+          <td style="padding:3px 10px;border-right:1px solid var(--border)">Q3</td>
+          <td style="padding:3px 10px">Q4</td>
+        </tr>
+        <tr>${quarters}</tr>
+      </table>
+    </div>`;
+  }).join('');
+
+  // Pending random-lock signals
+  const pendingSignals = Object.entries(btState.quarterTracking)
+    .filter(([,v]) => !v.lockedIn && v.hasEdge)
+    .sort((a,b) => b[1].bestEdge - a[1].bestEdge);
+
+  const pendingHTML = pendingSignals.length === 0
+    ? `<span style="color:var(--muted);font-size:0.65rem;">No edges ≥7pts live right now. Random lock fires sometime during each quarter. Bet size based on Kelly criterion.</span>`
+    : pendingSignals.map(([key, t]) => {
+        const quals = BT_TIERS.filter(tier => t.kalshiAsk <= tier.maxAsk).map(t => t.label.split(' ')[0]);
+        const timerActive = !!quarterLockTimers[key];
+        return `<div style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:4px 10px;margin:3px;font-size:0.65rem;background:var(--surface);">
+          <span style="width:5px;height:5px;border-radius:50%;background:${timerActive?'var(--accent)':'var(--muted)'};${timerActive?'animation:pulse 1.5s infinite':'opacity:0.4'};display:inline-block"></span>
+          <span style="font-family:'Bebas Neue'">${t.homeAbbr} vs ${t.awayAbbr}</span>
+          <span style="color:var(--kalshi)">Q${t.quarter}</span>
+          <span style="color:var(--accent)">▲ ${t.team} +${t.bestEdge}pts</span>
+          <span style="color:var(--muted)">${formatAmerican(centsToAmerican(t.kalshiAsk))}</span>
+          ${quals.length ? `<span style="font-size:0.5rem;color:var(--muted);border:1px solid var(--border);padding:1px 5px">${quals.join(' · ')}</span>` : ''}
+          ${timerActive ? `<span style="font-size:0.5rem;color:var(--accent);opacity:0.7">lock pending…</span>` : ''}
+        </div>`;
+      }).join('');
+
+  // Combined totals
+  const totalUnits = BT_TIERS.reduce((s,t) => s + btState[t.id].units, 0);
+  const totalStart = BT_TIERS.reduce((s,t) => s + t.startUnits, 0);
+  const totalPnl   = resolved.reduce((s,b) => s + (b.pnlUnits ?? 0), 0);
+  const totalROIColor = totalUnits >= totalStart ? 'var(--accent)' : 'var(--away)';
+  const totalWins = resolved.filter(b => b.outcome === 'win').length;
+
+  const recentBets = [...bets].sort((a,b) => b.timestamp - a.timestamp).slice(0, 40);
+  const betRows = recentBets.length === 0
+    ? `<tr><td colspan="8" style="color:var(--muted);padding:1.5rem;text-align:center;font-size:0.65rem;">No bets recorded yet. A random timer fires during each quarter — whatever the edge is at that moment gets locked in.</td></tr>`
+    : recentBets.map(b => {
+        const tier = BT_TIERS.find(t => t.id === b.tier);
+        const outcomeColor = b.outcome === 'win' ? 'var(--accent)' : b.outcome === 'loss' ? 'var(--away)' : 'var(--kalshi)';
+        const outcomeText  = b.outcome === 'win' ? '✓ WIN' : b.outcome === 'loss' ? '✗ LOSS' : '⏳ LIVE';
+        const pnlText  = b.pnlUnits != null ? fmtU(b.pnlUnits) : '—';
+        const pnlColor = b.pnlUnits != null ? (b.pnlUnits >= 0 ? 'var(--accent)' : 'var(--away)') : 'var(--muted)';
+        return `<tr style="border-top:1px solid var(--border);">
+          <td style="padding:7px 10px;font-family:'Bebas Neue';font-size:0.95rem;">${b.homeAbbr} vs ${b.awayAbbr}</td>
+          <td style="padding:7px 10px;color:var(--kalshi);font-size:0.65rem;">Q${b.quarter}</td>
+          <td style="padding:7px 10px;font-family:'Bebas Neue';font-size:0.95rem;">${b.team}</td>
+          <td style="padding:7px 10px;font-size:0.65rem;color:var(--accent)">+${b.bestEdge}pts</td>
+          <td style="padding:7px 10px;font-size:0.65rem;">${formatAmerican(centsToAmerican(b.kalshiAsk))}</td>
+          <td style="padding:7px 10px;font-size:0.65rem;">${b.stakeUnits.toFixed(2)}u<br><span style="font-size:0.5rem;color:var(--muted)">${(b.kellyFraction*100).toFixed(1)}% ½K · ${tier?.label.split(' ')[0]}</span></td>
+          <td style="padding:7px 10px;color:${outcomeColor};font-size:0.65rem;font-weight:600;">${outcomeText}</td>
+          <td style="padding:7px 10px;color:${pnlColor};font-family:'Bebas Neue';font-size:1.1rem;">${pnlText}</td>
+        </tr>`;
+      }).join('');
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;padding:1.2rem;border:1px solid var(--border);background:var(--surface);border-left:3px solid var(--accent);">
+      <div>
+        <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Combined Bankroll</div>
+        <div style="font-family:'Bebas Neue';font-size:2.4rem;color:${totalROIColor};line-height:1">${totalUnits.toFixed(1)}u</div>
+        <div style="font-size:0.6rem;color:${totalROIColor}">${fmtROI(totalUnits, totalStart)} ROI · started ${totalStart}u</div>
+      </div>
+      <div>
+        <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Overall Win Rate</div>
+        <div style="font-family:'Bebas Neue';font-size:2.4rem;line-height:1">${resolved.length ? (totalWins/resolved.length*100).toFixed(0)+'%' : '—'}</div>
+        <div style="font-size:0.6rem;color:var(--muted)">${totalWins}W / ${resolved.length - totalWins}L · ${pending.length} pending</div>
+      </div>
+      <div>
+        <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Total P&L</div>
+        <div style="font-family:'Bebas Neue';font-size:2.4rem;color:${totalROIColor};line-height:1">${fmtU(totalPnl)}</div>
+        <div style="font-size:0.6rem;color:var(--muted)">net units across all tiers</div>
+      </div>
+      <div>
+        <div style="font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">Signals Tracked</div>
+        <div style="font-family:'Bebas Neue';font-size:2.4rem;line-height:1">${Object.keys(btState.quarterTracking).length}</div>
+        <div style="font-size:0.6rem;color:var(--muted)">${Object.values(btState.quarterTracking).filter(v=>v.lockedIn).length} locked · ${pendingSignals.length} live</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.6rem;display:flex;align-items:center;gap:6px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse 1.5s infinite"></span>
+        Live Edge Snapshots — random lock timer active per quarter
+      </div>
+      ${pendingHTML}
+    </div>
+
+    <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:0.75rem;">By Odds Tier — 100u bankroll each</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;max-width:960px;margin-left:auto;margin-right:auto;">${tierHTML}</div>
+
+    <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:0.6rem;">Bet Log</div>
+    <div style="overflow-x:auto;border:1px solid var(--border);">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="font-size:0.5rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid var(--border);background:var(--chart-bg);">
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Game</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Qtr</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Bet</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Edge</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Odds</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Stake</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">Result</th>
+          <th style="padding:7px 10px;text-align:left;font-weight:normal;">P&L</th>
+        </tr></thead>
+        <tbody>${betRows}</tbody>
+      </table>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+      <button onclick="btReset()" style="background:transparent;border:1px solid var(--away);color:var(--away);padding:5px 14px;cursor:pointer;font-family:'IBM Plex Mono';font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;">Reset All Data</button>
+      <button onclick="btExport()" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 14px;cursor:pointer;font-family:'IBM Plex Mono';font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;">Export JSON</button>
+    </div>`;
+}
+
+function btReset() {
+  if (!confirm('Reset all backtest data? This cannot be undone.')) return;
+  btState = btInitialState();
+  btSave(btState);
+  renderBacktestView();
+}
+
+function btExport() {
+  const blob = new Blob([JSON.stringify(btState, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `backtest_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
 </script>
 </body>
 </html>
